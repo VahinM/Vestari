@@ -320,7 +320,7 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
 <script>
 
 const { useState, useMemo, useEffect, useRef } = React;
-const { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } = Recharts;
+const { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, AreaChart, Area, Line, LineChart, CartesianGrid, ReferenceLine } = Recharts;
 
 /* ============================================================
    VESTARI — educational investing platform (v1 rough draft)
@@ -354,34 +354,34 @@ const ASSET_META = {
   us_stocks: {
     label: "U.S. Stocks",
     color: C.usStock,
-    role: "Growth",
-    risk: "Higher",
-    behavior: "More volatile in the short term",
-    why: "U.S. stocks give you a stake in the long-term growth of American companies. They carry more short-term ups and downs, but historically have offered the strongest long-term growth of these four categories."
+    role: "For growing",
+    risk: "Bigger ups and downs",
+    behavior: "Jumps around a lot short-term",
+    why: "A stock means you own a tiny piece of a company. When U.S. companies do well over many years, your piece can grow a lot. The catch: the price bounces up and down a lot in the short term. Of these four, stocks have grown the most over long periods — but you have to be okay with the bumpy ride."
   },
   international_stocks: {
     label: "International Stocks",
     color: C.intlStock,
-    role: "Growth + diversification",
-    risk: "Higher",
-    behavior: "Volatile, moves differently than U.S. stocks",
-    why: "International stocks spread your growth exposure beyond the U.S. Because other economies don't always move in step with the U.S., holding both can smooth out your overall ride."
+    role: "For growing + spreading out",
+    risk: "Bigger ups and downs",
+    behavior: "Bounces around, but differently than U.S.",
+    why: "These are tiny pieces of companies in other countries. Owning some means you're not betting everything on the U.S. When one part of the world is having a rough time, another might be doing fine — so mixing them can make your overall ride a little smoother."
   },
   bonds: {
     label: "Bonds",
     color: C.bonds,
-    role: "Stability",
-    risk: "Lower to moderate",
-    behavior: "Steadier, cushions stock drops",
-    why: "Bonds are loans to governments or companies that pay interest. They typically move more gently than stocks, which helps cushion your portfolio during market downturns."
+    role: "For steadiness",
+    risk: "Smaller ups and downs",
+    behavior: "Calmer, softens the drops",
+    why: "A bond is like lending your money to a government or company, and they pay you a little extra for it. Bonds usually move much more gently than stocks, so they act like a shock absorber when stocks fall."
   },
   cash: {
     label: "Cash",
     color: C.cash,
-    role: "Safety + liquidity",
-    risk: "Lowest",
-    behavior: "Stable, easy to access",
-    why: "Cash (and cash-like savings) barely moves in value and is easy to access quickly. It anchors the portfolio and covers near-term needs, though it can lose ground to inflation over time."
+    role: "For safety + quick access",
+    risk: "Barely moves",
+    behavior: "Stays put, easy to grab",
+    why: "This is money in a savings account — it barely changes in value and you can get to it fast. It's the safe anchor of your mix. The downside: over many years, prices rise (that's inflation), so money just sitting can slowly buy less."
   }
 };
 
@@ -482,7 +482,7 @@ function computeAllocation(a) {
   }
 
   // --- Reaction to a 20% drop ---
-  if (a.drop === "Sell everything") {
+  if (a.drop === "Panic and take it all out") {
     us -= 12;
     intl -= 6;
     bonds += 12;
@@ -493,7 +493,7 @@ function computeAllocation(a) {
       dir: "down",
       text: "Selling during a drop locks in losses. Since big swings would push you to sell, the sample lowers stock exposure to make the ride calmer."
     });
-  } else if (a.drop === "Sell some investments") {
+  } else if (a.drop === "Take some out") {
     us -= 5;
     bonds += 3;
     cash += 2;
@@ -503,7 +503,7 @@ function computeAllocation(a) {
       dir: "down",
       text: "Some discomfort with losses nudges the sample toward a slightly steadier mix."
     });
-  } else if (a.drop === "Buy more") {
+  } else if (a.drop === "Put in more while it's cheap") {
     us += 6;
     intl += 3;
     bonds -= 6;
@@ -550,7 +550,7 @@ function computeAllocation(a) {
   }
 
   // --- Liquidity ---
-  if (a.liquidity === "Very important") {
+  if (a.liquidity === "A lot — I might need it fast") {
     bonds -= 5;
     cash += 5;
     notes.push({
@@ -559,7 +559,7 @@ function computeAllocation(a) {
       dir: "up",
       text: "Because getting to your money quickly matters, the sample holds a bit more cash."
     });
-  } else if (a.liquidity === "Not very important") {
+  } else if (a.liquidity === "Not really") {
     cash -= 4;
     bonds += 2;
     us += 2;
@@ -568,6 +568,81 @@ function computeAllocation(a) {
       impact: "Reduced cash",
       dir: "flat",
       text: "Since you don't need fast access, less is parked in cash and more can pursue growth."
+    });
+  }
+
+  // --- Income stability ---
+  if (a.income === "I don't earn yet / it's all over the place") {
+    us -= 5;
+    intl -= 2;
+    bonds += 4;
+    cash += 3;
+    notes.push({
+      label: "Income is variable or not yet earning",
+      impact: "Added stability",
+      dir: "down",
+      text: "When income is unpredictable, a bigger cushion of bonds and cash helps you avoid selling investments at a bad time to cover expenses."
+    });
+  } else if (a.income === "Very steady") {
+    us += 3;
+    bonds -= 2;
+    cash -= 1;
+    notes.push({
+      label: "Income is very steady",
+      impact: "Supported more growth",
+      dir: "up",
+      text: "A dependable income means you're less likely to need to tap investments early, which can support a bit more growth exposure."
+    });
+  }
+
+  // --- Emergency fund ---
+  if (a.emergency === "No, not yet") {
+    cash += 6;
+    us -= 4;
+    bonds -= 2;
+    notes.push({
+      label: "No emergency fund yet",
+      impact: "Increased cash",
+      dir: "up",
+      text: "Without a separate emergency fund, it's wise to keep more accessible cash so a surprise expense doesn't force you to sell investments. Building that fund first is often the healthiest move."
+    });
+  } else if (a.emergency === "Yes") {
+    cash -= 3;
+    us += 2;
+    bonds += 1;
+    notes.push({
+      label: "Has an emergency fund",
+      impact: "Reduced cash",
+      dir: "flat",
+      text: "Because you already have a separate safety cushion, less needs to sit in cash inside this portfolio."
+    });
+  }
+
+  // --- High-interest debt (educational flag) ---
+  if (a.debt === "Yes") {
+    us -= 3;
+    intl -= 2;
+    bonds += 3;
+    cash += 2;
+    notes.push({
+      label: "Has high-interest debt",
+      impact: "Leaned more conservative",
+      dir: "down",
+      text: "High-interest debt (like credit cards) often costs more each year than investments typically earn. Paying that down is frequently the single best 'return' available — so this leans gentler on risk as a nudge in that direction."
+    });
+  }
+
+  // --- Contribution consistency (affects framing, tiny allocation nudge) ---
+  if (a.contribution === "Yes, regularly") {
+    us += 3;
+    intl += 1;
+    bonds -= 3;
+    cash -= 1;
+    notes.push({
+      label: "Will contribute regularly",
+      impact: "Supported more growth",
+      dir: "up",
+      text: "Adding money steadily means you're buying through both high and low markets over time, which can smooth out risk — so a slightly higher growth tilt fits."
     });
   }
 
@@ -781,37 +856,69 @@ const Disclaimer = ({
 const QUESTIONS = [{
   id: "age",
   type: "number",
-  q: "What is your age?",
-  hint: "We use age only as a rough signal of your investing timeline."
+  q: "How old are you?",
+  hint: "This just helps us guess how long your money can grow."
 }, {
   id: "horizon",
   type: "choice",
-  q: "When might you need this money?",
+  q: "When do you think you'll need this money?",
+  hint: "In other words, how long can you leave it alone?",
   options: ["Less than 3 years", "3–5 years", "5–10 years", "10–20 years", "20+ years"]
 }, {
   id: "goal",
   type: "choice",
-  q: "What would this money primarily be for?",
-  options: ["Learning about investing", "Building long-term wealth", "College or education", "Future major purchase", "Retirement", "General investing"]
+  q: "What's this money mostly for?",
+  options: ["Just learning how this works", "Growing money for the future", "College or school", "A big purchase someday", "Retirement (way later)", "Just investing in general"]
+}, {
+  id: "income",
+  type: "choice",
+  q: "How steady is the money you earn?",
+  hint: "Do you get money regularly, or does it come and go?",
+  options: ["I don't earn yet / it's all over the place", "Kind of steady", "Very steady"]
+}, {
+  id: "emergency",
+  type: "choice",
+  q: "Do you have money saved for emergencies (about 3 months of costs), kept separate from this?",
+  hint: "Emergency money is a stash for surprises — like a phone breaking — that you don't invest.",
+  options: ["No, not yet", "A little bit", "Yes"]
+}, {
+  id: "debt",
+  type: "choice",
+  q: "Do you owe money that charges high interest (like a credit card)?",
+  hint: "That kind of debt usually grows faster than investments, so it's worth knowing.",
+  options: ["Yes", "A little", "No"]
 }, {
   id: "drop",
   type: "choice",
-  q: "Imagine your investments temporarily dropped 20%. What would you most likely do?",
-  options: ["Sell everything", "Sell some investments", "Hold and wait", "Buy more"]
+  q: "Pretend your money suddenly dropped 20%. What would you do?",
+  hint: "So if $100 became $80 for a while — your gut reaction?",
+  options: ["Panic and take it all out", "Take some out", "Leave it and wait", "Put in more while it's cheap"]
 }, {
   id: "riskPref",
   type: "slider",
-  q: "What matters more to you?"
+  q: "Which sounds more like you?"
+}, {
+  id: "contribution",
+  type: "choice",
+  q: "Will you keep adding money over time (like every month)?",
+  hint: "Adding a little regularly is one of the best money habits there is.",
+  options: ["No, just once", "Now and then", "Yes, regularly"]
 }, {
   id: "experience",
   type: "choice",
-  q: "How familiar are you with investing?",
-  options: ["Completely new", "Know the basics", "Some experience", "Experienced"]
+  q: "How much do you already know about investing?",
+  options: ["Nothing at all", "A little", "A fair amount", "Quite a lot"]
+}, {
+  id: "concept",
+  type: "choice",
+  q: "Quick check — what does \"spreading out\" your money mainly do?",
+  hint: "No worries if you're unsure! This just helps us explain things at the right level.",
+  options: ["Promises you'll make money", "Lowers the risk of one bad pick hurting you", "Finds the one perfect investment", "Not sure yet"]
 }, {
   id: "liquidity",
   type: "choice",
-  q: "How important is having quick access to this money?",
-  options: ["Very important", "Somewhat important", "Not very important"]
+  q: "How much do you need to grab this money quickly?",
+  options: ["A lot — I might need it fast", "Somewhat", "Not really"]
 }];
 function Questionnaire({
   onDone
@@ -1020,6 +1127,686 @@ function Questionnaire({
 }
 
 // ============================================================
+//  FINANCE MATH  (educational estimates, clearly not guarantees)
+// ============================================================
+// Rough long-run *assumptions* per asset class, for illustration only.
+// These are simplified teaching numbers, not forecasts.
+const ASSUMPTIONS = {
+  us_stocks: {
+    ret: 0.09,
+    vol: 0.16
+  },
+  international_stocks: {
+    ret: 0.08,
+    vol: 0.17
+  },
+  bonds: {
+    ret: 0.04,
+    vol: 0.06
+  },
+  cash: {
+    ret: 0.02,
+    vol: 0.01
+  }
+};
+function blended(alloc) {
+  let ret = 0,
+    vol = 0;
+  for (const k in alloc) {
+    const w = alloc[k] / 100;
+    ret += w * ASSUMPTIONS[k].ret;
+    vol += w * ASSUMPTIONS[k].vol; // simple weighted vol (ignores correlation — kept simple on purpose)
+  }
+  return {
+    ret,
+    vol
+  };
+}
+
+// Project a starting amount + monthly contribution over N years.
+// Returns a low / expected / high band using ± one volatility "haircut".
+function project(alloc, start, monthly, years) {
+  const {
+    ret,
+    vol
+  } = blended(alloc);
+  const scenarios = {
+    low: ret - vol * 0.6,
+    expected: ret,
+    high: ret + vol * 0.6
+  };
+  const out = [];
+  for (let y = 0; y <= years; y++) {
+    const row = {
+      year: y
+    };
+    for (const key in scenarios) {
+      const r = scenarios[key];
+      // future value of lump sum + future value of monthly contributions
+      const lump = start * Math.pow(1 + r, y);
+      const monthlyR = r / 12;
+      const months = y * 12;
+      const contrib = monthlyR === 0 ? monthly * months : monthly * ((Math.pow(1 + monthlyR, months) - 1) / monthlyR);
+      row[key] = Math.round(lump + contrib);
+    }
+    out.push(row);
+  }
+  return {
+    data: out,
+    ret,
+    vol
+  };
+}
+const fmt$ = n => "$" + Math.round(n).toLocaleString();
+
+// A collapsible "dive deeper" section wrapper.
+function Expand({
+  title,
+  subtitle,
+  children,
+  defaultOpen = false
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return /*#__PURE__*/React.createElement(Card, {
+    style: {
+      padding: 0,
+      overflow: "hidden"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    onClick: () => setOpen(!open),
+    style: {
+      cursor: "pointer",
+      padding: "20px 24px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.text,
+      fontSize: 18,
+      fontWeight: 600
+    }
+  }, title), subtitle && /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.muted,
+      fontSize: 14,
+      marginTop: 2
+    }
+  }, subtitle)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.emerald,
+      fontSize: 24,
+      lineHeight: 1,
+      transform: open ? "rotate(45deg)" : "none",
+      transition: "transform .2s ease"
+    }
+  }, "+")), open && /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "0 24px 24px"
+    }
+  }, children));
+}
+
+// ---- Feature: Grow-your-money projection ----
+function GrowthProjection({
+  alloc
+}) {
+  const [start, setStart] = useState(1000);
+  const [monthly, setMonthly] = useState(100);
+  const [years, setYears] = useState(20);
+  const {
+    data,
+    ret
+  } = useMemo(() => project(alloc, start, monthly, years), [alloc, start, monthly, years]);
+  const final = data[data.length - 1];
+  const invested = start + monthly * 12 * years;
+  const NumberInput = ({
+    label,
+    value,
+    setValue,
+    prefix,
+    step = 100,
+    min = 0
+  }) => /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 130
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      display: "block",
+      marginBottom: 6
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      background: C.bg2,
+      border: `1px solid ${C.border}`,
+      borderRadius: 10,
+      padding: "0 12px"
+    }
+  }, prefix && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted
+    }
+  }, prefix), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    min: min,
+    step: step,
+    value: value,
+    onChange: e => setValue(Math.max(min, parseInt(e.target.value) || 0)),
+    style: {
+      background: "none",
+      border: "none",
+      color: C.text,
+      fontSize: 16,
+      padding: "12px 6px",
+      width: "100%",
+      outline: "none",
+      fontFamily: "inherit"
+    }
+  })));
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 14,
+      flexWrap: "wrap",
+      marginBottom: 20
+    }
+  }, /*#__PURE__*/React.createElement(NumberInput, {
+    label: "Starting amount",
+    value: start,
+    setValue: setStart,
+    prefix: "$",
+    step: 500
+  }), /*#__PURE__*/React.createElement(NumberInput, {
+    label: "Monthly contribution",
+    value: monthly,
+    setValue: setMonthly,
+    prefix: "$",
+    step: 50
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 130
+    }
+  }, /*#__PURE__*/React.createElement("label", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      display: "block",
+      marginBottom: 6
+    }
+  }, "Years: ", years), /*#__PURE__*/React.createElement("input", {
+    type: "range",
+    min: 1,
+    max: 40,
+    value: years,
+    onChange: e => setYears(parseInt(e.target.value)),
+    style: {
+      width: "100%",
+      accentColor: C.emerald,
+      marginTop: 14
+    }
+  }))), /*#__PURE__*/React.createElement(ResponsiveContainer, {
+    width: "100%",
+    height: 240
+  }, /*#__PURE__*/React.createElement(AreaChart, {
+    data: data,
+    margin: {
+      top: 10,
+      right: 10,
+      left: 0,
+      bottom: 0
+    }
+  }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+    id: "gExp",
+    x1: "0",
+    y1: "0",
+    x2: "0",
+    y2: "1"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0%",
+    stopColor: C.emerald,
+    stopOpacity: 0.35
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "100%",
+    stopColor: C.emerald,
+    stopOpacity: 0
+  }))), /*#__PURE__*/React.createElement(CartesianGrid, {
+    stroke: C.border,
+    vertical: false
+  }), /*#__PURE__*/React.createElement(XAxis, {
+    dataKey: "year",
+    stroke: C.muted,
+    tick: {
+      fill: C.muted,
+      fontSize: 12
+    },
+    tickFormatter: y => `${y}y`
+  }), /*#__PURE__*/React.createElement(YAxis, {
+    stroke: C.muted,
+    tick: {
+      fill: C.muted,
+      fontSize: 12
+    },
+    tickFormatter: v => v >= 1000 ? `$${Math.round(v / 1000)}k` : `$${v}`,
+    width: 48
+  }), /*#__PURE__*/React.createElement(Tooltip, {
+    contentStyle: {
+      background: C.bg2,
+      border: `1px solid ${C.border}`,
+      borderRadius: 10,
+      color: C.text
+    },
+    formatter: (v, n) => [fmt$(v), n === "expected" ? "Expected" : n === "low" ? "If it goes poorly" : "If it goes well"],
+    labelFormatter: y => `Year ${y}`
+  }), /*#__PURE__*/React.createElement(Area, {
+    type: "monotone",
+    dataKey: "high",
+    stroke: "none",
+    fill: "url(#gExp)"
+  }), /*#__PURE__*/React.createElement(Area, {
+    type: "monotone",
+    dataKey: "expected",
+    stroke: C.emerald,
+    strokeWidth: 2.5,
+    fill: "url(#gExp)"
+  }), /*#__PURE__*/React.createElement(Area, {
+    type: "monotone",
+    dataKey: "low",
+    stroke: C.muted,
+    strokeWidth: 1,
+    strokeDasharray: "4 4",
+    fill: "none"
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 12,
+      marginTop: 18
+    }
+  }, [["You put in", invested, C.muted], ["Might grow to (expected)", final.expected, C.emerald], ["Range", null, C.text]].map(([label, val, color], i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      background: C.bg2,
+      borderRadius: 12,
+      padding: 16,
+      border: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.muted,
+      fontSize: 12,
+      marginBottom: 6
+    }
+  }, label), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color,
+      fontSize: i === 2 ? 15 : 22,
+      fontWeight: 700
+    }
+  }, i === 2 ? `${fmt$(final.low)} – ${fmt$(final.high)}` : fmt$(val))))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      lineHeight: 1.6,
+      marginTop: 16
+    }
+  }, "Over ", years, " years you'd contribute ", fmt$(invested), ". Based on simplified long-run assumptions, this mix might grow to around ", fmt$(final.expected), " — but real results swing a lot, which is why a range is shown. These are illustrative estimates, not predictions, and returns are never guaranteed."));
+}
+
+// ---- Feature: Inflation reality check ----
+function InflationCheck({
+  alloc
+}) {
+  const [years, setYears] = useState(20);
+  const inflation = 0.03;
+  const {
+    data
+  } = project(alloc, 1000, 100, years);
+  const nominal = data[data.length - 1].expected;
+  const realValue = Math.round(nominal / Math.pow(1 + inflation, years));
+  const lostPct = Math.round((1 - realValue / nominal) * 100);
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 15,
+      lineHeight: 1.7,
+      marginBottom: 18
+    }
+  }, "Money grows, but prices rise too. Inflation (assumed here at 3%/year) quietly reduces what your future dollars can actually buy. Here's the same projection shown in today's buying power."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 14
+    }
+  }, "Over"), /*#__PURE__*/React.createElement("input", {
+    type: "range",
+    min: 5,
+    max: 40,
+    value: years,
+    onChange: e => setYears(parseInt(e.target.value)),
+    style: {
+      flex: 1,
+      accentColor: C.emerald
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.text,
+      fontSize: 14,
+      minWidth: 60
+    }
+  }, years, " years")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.bg2,
+      borderRadius: 12,
+      padding: 18,
+      border: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      marginBottom: 6
+    }
+  }, "On paper (nominal)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.text,
+      fontSize: 26,
+      fontWeight: 700
+    }
+  }, fmt$(nominal))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.bg2,
+      borderRadius: 12,
+      padding: 18,
+      border: `1px solid ${C.emeraldDim}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      marginBottom: 6
+    }
+  }, "Real buying power (today's dollars)"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.emerald,
+      fontSize: 26,
+      fontWeight: 700
+    }
+  }, fmt$(realValue)))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      lineHeight: 1.6,
+      marginTop: 16
+    }
+  }, "That's about ", lostPct, "% less in real terms. This is exactly why keeping everything in cash feels \"safe\" but can quietly lose ground — and why some growth exposure matters over long periods."));
+}
+
+// ---- Feature: What a rough year looks like ----
+function RoughYear({
+  alloc
+}) {
+  const {
+    vol
+  } = blended(alloc);
+  const [amount, setAmount] = useState(10000);
+  // Illustrative "bad year": roughly a 1.5-sigma down move, floored gently.
+  const badDrop = Math.min(0.55, vol * 1.5);
+  const dropValue = Math.round(amount * badDrop);
+  const after = amount - dropValue;
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 15,
+      lineHeight: 1.7,
+      marginBottom: 18
+    }
+  }, "Growth isn't a straight line. To make risk feel real, here's roughly how your mix might behave in a genuinely bad year — the kind that happens every so often. Seeing this before it happens is what helps people stay calm and not sell at the bottom."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 18
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 14
+    }
+  }, "If you had"), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: amount,
+    step: 1000,
+    onChange: e => setAmount(Math.max(0, parseInt(e.target.value) || 0)),
+    style: {
+      background: C.bg2,
+      border: `1px solid ${C.border}`,
+      borderRadius: 8,
+      color: C.text,
+      padding: "8px 10px",
+      width: 120,
+      fontFamily: "inherit",
+      fontSize: 15
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 14
+    }
+  }, "invested")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: C.bg2,
+      borderRadius: 12,
+      padding: 20,
+      border: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 14
+    }
+  }, "A rough year might drop it by"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.cash,
+      fontSize: 18,
+      fontWeight: 700
+    }
+  }, "−", fmt$(dropValue), " (", Math.round(badDrop * 100), "%)")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 10,
+      background: C.bg,
+      borderRadius: 99,
+      overflow: "hidden",
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: "100%",
+      width: `${(1 - badDrop) * 100}%`,
+      background: C.emerald,
+      borderRadius: 99
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 14
+    }
+  }, "You'd temporarily have"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.text,
+      fontSize: 18,
+      fontWeight: 700
+    }
+  }, fmt$(after)))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      lineHeight: 1.6,
+      marginTop: 16
+    }
+  }, "A more stock-heavy mix has bigger drops like this; a bonds-and-cash mix has smaller ones. Historically, diversified portfolios have recovered from downturns given enough time — but recovery is never guaranteed, and this is a rough illustration, not a prediction."));
+}
+
+// ---- Feature: Adjust-your-mix live editor ----
+function MixEditor({
+  baseAlloc
+}) {
+  const [mix, setMix] = useState(baseAlloc);
+  const total = Object.values(mix).reduce((a, b) => a + b, 0);
+  const {
+    ret,
+    vol
+  } = blended(mix);
+  const proj = project(mix, 1000, 100, 20).data;
+  const final20 = proj[proj.length - 1].expected;
+  const setOne = (key, val) => setMix({
+    ...mix,
+    [key]: val
+  });
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 15,
+      lineHeight: 1.7,
+      marginBottom: 20
+    }
+  }, "Curious what happens if you shift things around? Drag any slider to build your own mix and watch the estimated growth and risk change. This is a sandbox for understanding tradeoffs — not a recommendation."), Object.keys(ASSET_META).map(k => /*#__PURE__*/React.createElement("div", {
+    key: k,
+    style: {
+      marginBottom: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.text,
+      fontSize: 14,
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: 10,
+      height: 10,
+      borderRadius: 3,
+      background: ASSET_META[k].color
+    }
+  }), ASSET_META[k].label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.text,
+      fontSize: 14,
+      fontWeight: 600
+    }
+  }, mix[k], "%")), /*#__PURE__*/React.createElement("input", {
+    type: "range",
+    min: 0,
+    max: 100,
+    value: mix[k],
+    onChange: e => setOne(k, parseInt(e.target.value)),
+    style: {
+      width: "100%",
+      accentColor: ASSET_META[k].color
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "10px 14px",
+      borderRadius: 10,
+      marginBottom: 18,
+      fontSize: 14,
+      background: total === 100 ? "rgba(52,211,153,.08)" : "rgba(245,200,107,.10)",
+      border: `1px solid ${total === 100 ? C.emeraldDim : C.cash}`,
+      color: total === 100 ? C.emerald : C.cash
+    }
+  }, total === 100 ? "✓ Your mix adds up to 100%" : `Your mix adds up to ${total}% — adjust so it totals 100% for a realistic portfolio.`), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gap: 12
+    }
+  }, [["Est. yearly return", `${(ret * 100).toFixed(1)}%`, C.emerald], ["Swing (volatility)", `±${(vol * 100).toFixed(0)}%`, C.cash], ["$1k + $100/mo → 20y", fmt$(final20), C.text]].map(([l, v, c], i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      background: C.bg2,
+      borderRadius: 12,
+      padding: 14,
+      border: `1px solid ${C.border}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: C.muted,
+      fontSize: 12,
+      marginBottom: 5
+    }
+  }, l), /*#__PURE__*/React.createElement("div", {
+    style: {
+      color: c,
+      fontSize: 18,
+      fontWeight: 700
+    }
+  }, v)))), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 13,
+      lineHeight: 1.6,
+      marginTop: 16
+    }
+  }, "Notice the tradeoff: pushing stocks up raises the estimated return ", /*#__PURE__*/React.createElement("em", null, "and"), " the size of the swings. There's no free lunch — higher potential growth comes with a bumpier ride."));
+}
+
+// ---- Feature: download a plain-text summary of the plan ----
+function downloadPlan(result, answers) {
+  const {
+    alloc,
+    profile
+  } = result;
+  const lines = ["VESTARI — MY SAMPLE PORTFOLIO PLAN", "===================================", "", `Risk profile: ${profile}`, "", "Allocation:", `  U.S. Stocks:            ${alloc.us_stocks}%`, `  International Stocks:   ${alloc.international_stocks}%`, `  Bonds:                 ${alloc.bonds}%`, `  Cash:                  ${alloc.cash}%`, "", "How my answers shaped it:", ...result.notes.map(n => `  - ${n.label}: ${n.impact}`), "", "-----------------------------------", "Vestari is an educational project and does not provide financial,", "investment, legal, or tax advice. Portfolio examples are hypothetical", "and designed solely to demonstrate investing concepts. Investing", "involves risk, including the possible loss of principal."];
+  const blob = new Blob([lines.join("\n")], {
+    type: "text/plain"
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "my-vestari-plan.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
 //  RESULTS
 // ============================================================
 function Results({
@@ -1108,14 +1895,119 @@ function Results({
       lineHeight: 1.6,
       fontSize: 15
     }
-  }, profileText))), /*#__PURE__*/React.createElement("h3", {
+  }, profileText))), /*#__PURE__*/React.createElement(Card, {
+    style: {
+      marginTop: 20
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      color: C.text,
+      fontSize: 18,
+      fontWeight: 600,
+      marginBottom: 4
+    }
+  }, "The detailed breakdown"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      fontSize: 14,
+      marginBottom: 18
+    }
+  }, "A closer look at how the sample splits, including within the stock portion. These are broad categories — not specific investments to buy."), (() => {
+    const stockTotal = alloc.us_stocks + alloc.international_stocks;
+    const rows = [["Stocks (total)", stockTotal, C.usStock, `Your growth engine. Split roughly ${alloc.us_stocks}% U.S. / ${alloc.international_stocks}% international.`], ["  • U.S. stocks", alloc.us_stocks, C.usStock, "Broad exposure to U.S. companies — commonly via a total-U.S.-market index fund."], ["  • International stocks", alloc.international_stocks, C.intlStock, "Companies outside the U.S. — adds diversification since regions don't always move together."], ["Bonds", alloc.bonds, C.bonds, "Steadier holdings that cushion downturns — commonly a broad bond index fund."], ["Cash", alloc.cash, C.cash, "Stable, accessible money — a high-yield savings or money-market fund."]];
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: "flex",
+        flexDirection: "column",
+        gap: 2
+      }
+    }, rows.map(([label, pct, color, desc], i) => {
+      const isSub = String(label).startsWith("  ");
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: {
+          padding: isSub ? "8px 0 8px 20px" : "12px 0",
+          borderTop: isSub ? "none" : `1px solid ${C.border}`,
+          opacity: isSub ? 0.9 : 1
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 3
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          color: C.text,
+          fontSize: isSub ? 14 : 15,
+          fontWeight: isSub ? 400 : 600
+        }
+      }, !isSub && /*#__PURE__*/React.createElement("span", {
+        style: {
+          width: 10,
+          height: 10,
+          borderRadius: 3,
+          background: color,
+          display: "inline-block"
+        }
+      }), String(label).trim()), /*#__PURE__*/React.createElement("span", {
+        style: {
+          color: C.text,
+          fontSize: isSub ? 14 : 16,
+          fontWeight: 700
+        }
+      }, pct, "%")), /*#__PURE__*/React.createElement("p", {
+        style: {
+          color: C.muted,
+          fontSize: 13,
+          lineHeight: 1.5,
+          margin: 0,
+          paddingLeft: isSub ? 0 : 18
+        }
+      }, desc));
+    }));
+  })()), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 12,
+      margin: "34px 0 6px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 1,
+      flex: 1,
+      background: C.border
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: C.muted,
+      fontSize: 13
+    }
+  }, "Scroll to go deeper — from the basics down to the details"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: 1,
+      flex: 1,
+      background: C.border
+    }
+  })), /*#__PURE__*/React.createElement("h3", {
     style: {
       color: C.text,
       fontSize: 22,
       fontWeight: 600,
-      margin: "40px 0 18px"
+      margin: "30px 0 6px"
     }
-  }, "What's in your sample portfolio"), /*#__PURE__*/React.createElement("div", {
+  }, "What's in your sample portfolio"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      marginBottom: 18,
+      fontSize: 15
+    }
+  }, "The four building blocks, and why each one is here."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr",
@@ -1256,16 +2148,62 @@ function Results({
       lineHeight: 1.6,
       margin: 0
     }
-  }, n.text)))))), /*#__PURE__*/React.createElement("div", {
+  }, n.text)))))), /*#__PURE__*/React.createElement("h3", {
+    style: {
+      color: C.text,
+      fontSize: 22,
+      fontWeight: 600,
+      margin: "48px 0 6px"
+    }
+  }, "Go deeper"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: C.muted,
+      marginBottom: 20,
+      fontSize: 15
+    }
+  }, "Open any section to explore what your portfolio could mean in real life. Everything below is interactive."), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement(Expand, {
+    title: "Grow your money over time",
+    subtitle: "See how contributions could compound — with an honest range",
+    defaultOpen: true
+  }, /*#__PURE__*/React.createElement(GrowthProjection, {
+    alloc: alloc
+  })), /*#__PURE__*/React.createElement(Expand, {
+    title: "The inflation reality check",
+    subtitle: "What your future money is really worth in today's dollars"
+  }, /*#__PURE__*/React.createElement(InflationCheck, {
+    alloc: alloc
+  })), /*#__PURE__*/React.createElement(Expand, {
+    title: "What a rough year looks like",
+    subtitle: "Make the risk feel real before it happens"
+  }, /*#__PURE__*/React.createElement(RoughYear, {
+    alloc: alloc
+  })), /*#__PURE__*/React.createElement(Expand, {
+    title: "Adjust your mix yourself",
+    subtitle: "A sandbox to feel the growth-vs-risk tradeoff"
+  }, /*#__PURE__*/React.createElement(MixEditor, {
+    baseAlloc: alloc
+  }))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 12,
-      marginTop: 32,
+      marginTop: 34,
       flexWrap: "wrap"
     }
   }, /*#__PURE__*/React.createElement(Btn, {
     onClick: onLearn
   }, "Take the understanding quiz"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "soft",
+    onClick: () => downloadPlan(result, answers)
+  }, "⬇ Save my plan"), /*#__PURE__*/React.createElement(Btn, {
+    kind: "soft",
+    onClick: () => window.print()
+  }, "🖨 Print"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     onClick: onRetake
   }, "Retake questionnaire")), /*#__PURE__*/React.createElement("div", {
@@ -1827,7 +2765,7 @@ function Landing({
       marginBottom: 32,
       maxWidth: 520
     }
-  }, "Vestari turns your goals, timeline, and risk tolerance into an educational sample portfolio — then explains the reasoning behind every decision."), /*#__PURE__*/React.createElement("div", {
+  }, "Vestari asks you a few simple questions, then shows you a smart way to spread your money — and explains ", /*#__PURE__*/React.createElement("em", null, "why"), " in plain English. No experience needed."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 14,
@@ -2050,7 +2988,7 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("style", null, `
         * { box-sizing: border-box; margin: 0; }
-        /* Inter font falls back to system UI fonts */
+        /* system fonts */
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         input[type=range]{ height: 6px; border-radius: 99px; }
