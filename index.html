@@ -330,28 +330,21 @@ const { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, T
 
 // ---- Design tokens ----
 const C = {
-  bg: "#FBFBFA",
-  // warm off-white background
-  bg2: "#F3F3F1",
-  // subtle raised surface
-  card: "#FFFFFF",
-  // white cards
-  border: "#E4E4E0",
-  // soft warm border
-  text: "#1A1A18",
-  // near-black warm text
-  muted: "#6B6B66",
-  // warm muted grey
-  emerald: "#4F7A5E",
-  // deeper sage green (readable on white)
-  emeraldDim: "#3B5C46",
-  usStock: "#4F7A5E",
-  // sage
-  intlStock: "#5E7A93",
-  // muted slate blue
-  bonds: "#A38F73",
-  // warm taupe
-  cash: "#C0A25E" // muted gold
+  bg: "#F4F1EA",       // warm paper, not pure white
+  bg2: "#EBE7DD",      // slightly deeper paper for raised areas
+  card: "#FBF9F3",     // cards: soft cream, never #fff
+  border: "#DAD4C6",   // warm sand border
+  text: "#23211C",     // warm ink
+  muted: "#726C5E",    // warm taupe-grey
+  emerald: "#3E6B4F",  // forest green (hand-picked, deeper than default sage)
+  emeraldDim: "#2E5039",
+  clay: "#B45B3E",     // warm terracotta accent for emphasis
+  usStock: "#3E6B4F",  // forest
+  intlStock: "#4A6B82", // muted deep blue
+  bonds: "#9A7B4F",    // ochre
+  cash: "#C2A15A",     // mustard
+  serif: "'Fraunces', Georgia, serif",       // characterful display serif
+  sans: "'Darker Grotesque', 'Inter', system-ui, sans-serif" // distinctive grotesque
 };
 const ASSET_META = {
   us_stocks: {
@@ -963,7 +956,7 @@ const Btn = ({
   const kinds = {
     primary: {
       background: C.emerald,
-      color: "#FFFFFF",
+      color: "#FBF9F3",
       boxShadow: "none"
     },
     ghost: {
@@ -1914,7 +1907,7 @@ function MixEditor({
       border: `1px solid ${total === 100 ? C.emeraldDim : C.cash}`,
       color: total === 100 ? C.emerald : C.cash
     }
-  }, total === 100 ? "✓ Your mix adds up to 100%" : `Your mix adds up to ${total}% — adjust so it totals 100% for a realistic portfolio.`), /*#__PURE__*/React.createElement("div", {
+  }, total === 100 ? "Your mix adds up to 100%" : `Your mix adds up to ${total}% — adjust so it totals 100% for a realistic portfolio.`), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
@@ -2028,7 +2021,7 @@ function DetailedBreakdown({
       fontSize: 13,
       fontWeight: 600,
       background: detailed === val ? C.emerald : "transparent",
-      color: detailed === val ? "#fff" : C.muted
+      color: detailed === val ? "#FBF9F3" : C.muted
     }
   }, label)))), !detailed && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -2590,7 +2583,7 @@ function Results({
     }
   }, /*#__PURE__*/React.createElement(Btn, {
     onClick: onTestInLab
-  }, "🧪 Test this portfolio in the Lab"), /*#__PURE__*/React.createElement(Btn, {
+  }, "Test this portfolio in the Lab"), /*#__PURE__*/React.createElement(Btn, {
     kind: "soft",
     onClick: onLearn
   }, "Take the understanding quiz"), /*#__PURE__*/React.createElement(Btn, {
@@ -2599,7 +2592,7 @@ function Results({
   }, "⬇ Save my plan"), /*#__PURE__*/React.createElement(Btn, {
     kind: "soft",
     onClick: () => window.print()
-  }, "🖨 Print"), /*#__PURE__*/React.createElement(Btn, {
+  }, "Print"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
     onClick: onRetake
   }, "Retake questionnaire")), /*#__PURE__*/React.createElement("div", {
@@ -2949,6 +2942,1111 @@ function RiskSpectrum() {
 // ============================================================
 //  LEARN + GLOSSARY DATA
 // ============================================================
+
+// ===== VESTARI LEARNING UPGRADE =====
+// ============================================================
+//  VESTARI CURRICULUM — 8 modules x 3 lessons
+//  Educational content for beginners (high-school level).
+//  Factual claims kept to broadly-accepted, source-backed basics
+//  (Investor.gov / SEC / FINRA / Federal Reserve style).
+//  Every lesson: objective, opening, explanation, activity, checks, takeaway, connection.
+// ============================================================
+const CURRICULUM = [
+  {
+    id: "m1", title: "Money Foundations", mins: 12,
+    blurb: "Saving vs. investing, emergency funds, and inflation.",
+    lessons: [
+      {
+        id: "m1l1", title: "Saving vs. Investing", mins: 4,
+        objective: "Tell the difference between saving and investing, and when each makes sense.",
+        opening: "You get $500 from a summer job. Part of you wants it somewhere safe you can grab anytime. Part of you wants it to grow. Those two instincts are exactly the difference between saving and investing.",
+        explanation: [
+          "**Saving** means keeping money somewhere safe and easy to reach — like a bank savings account. The amount barely changes, and you can take it out whenever you need it. The trade-off: it grows very slowly.",
+          "**Investing** means putting money into things like stocks or bonds that can grow more over time — but can also drop in value, sometimes sharply. You're accepting some risk in exchange for the chance of more growth.",
+          "Neither is 'better.' They're tools for different jobs. Money you'll need soon belongs in savings. Money you won't touch for years is where investing has time to work."
+        ],
+        activity: { type: "sort", prompt: "Which tool fits each goal — saving or investing?",
+          items: [
+            { text: "Concert tickets next month", answer: "Saving" },
+            { text: "Retirement in 40 years", answer: "Investing" },
+            { text: "Emergency car repair fund", answer: "Saving" },
+            { text: "Money for a house in 20 years", answer: "Investing" }
+          ] },
+        checks: [
+          { q: "You need money in 3 weeks. Where does it belong?", options: ["Investing", "Saving"], correct: 1,
+            explain: "Money needed very soon belongs in savings — there's no time to recover if an investment drops right before you need it." },
+          { q: "What are you accepting when you invest instead of save?", options: ["Guaranteed higher returns", "Some risk, for the chance of more growth", "No downside at all"], correct: 1,
+            explain: "Investing trades safety for growth *potential* — the possibility of more, with the risk of losing value along the way." }
+        ],
+        takeaway: "Soon money → saving. Long-term money → investing. The timeline decides.",
+        connection: "When you build a portfolio in Vestari, the 'When will you need this money?' question is doing exactly this sorting."
+      },
+      {
+        id: "m1l2", title: "Why an Emergency Fund Comes First", mins: 4,
+        objective: "Explain why an emergency fund is the foundation before investing.",
+        opening: "Imagine your phone dies and you need $300 today. If all your money is invested and the market just dropped, you'd have to sell at a loss to cover it. An emergency fund prevents that trap.",
+        explanation: [
+          "An **emergency fund** is money set aside for surprises — a broken phone, a car repair, a sudden expense. It's kept in savings, separate from money you invest.",
+          "A common guideline is roughly **3–6 months of expenses**, but for a student even a smaller cushion helps. The point isn't the exact number; it's having *something* safe before you take on investment risk.",
+          "Without this cushion, a surprise expense can force you to sell investments at the worst possible time. With it, you can leave your investments alone to do their long-term job."
+        ],
+        activity: { type: "slider", prompt: "A person spends about $2,000/month. Drag to a 3-month emergency fund target.",
+          min: 0, max: 12000, step: 500, target: 6000, unit: "$",
+          feedback: "About $6,000 covers roughly 3 months here. Having this safe first means market dips don't force you to sell." },
+        checks: [
+          { q: "Why keep the emergency fund in savings, not invested?", options: ["Savings grows faster", "So it's safe and reachable the moment you need it", "Investing is illegal for emergencies"], correct: 1,
+            explain: "An emergency fund's whole job is to be there, unchanged, the instant you need it — that's savings, not investing." },
+          { q: "What can happen if you invest without an emergency fund?", options: ["Nothing different", "A surprise expense may force you to sell at a bad time", "Your returns are guaranteed higher"], correct: 1,
+            explain: "No cushion means surprises get paid for by selling investments — possibly right after a drop, locking in a loss." }
+        ],
+        takeaway: "Build a safety cushion first. It's what lets your investments stay invested.",
+        connection: "Vestari's portfolio builder asks whether you have an emergency fund — and nudges toward more cash if you don't."
+      },
+      {
+        id: "m1l3", title: "Inflation: The Quiet Shrinker", mins: 4,
+        objective: "Describe how inflation reduces purchasing power over time.",
+        opening: "Ask an adult what a movie ticket or a candy bar cost when they were your age. The price went up — but the candy didn't get better. That's inflation.",
+        explanation: [
+          "**Inflation** is the gradual rise in prices over time. As prices rise, each dollar buys a little less than it used to. This is normal in most economies — a small amount of inflation happens most years.",
+          "Here's the catch: money sitting in cash doesn't shrink in number, but it shrinks in *buying power*. $100 under your mattress is still $100 in ten years — but it may buy noticeably less.",
+          "This is a big reason people invest for long-term goals. To keep up with (or stay ahead of) rising prices over decades, money usually needs to grow faster than inflation — which cash alone rarely does."
+        ],
+        activity: { type: "inflation", prompt: "See what $100 today might buy in the future at about 3% inflation per year.",
+          years: 20, rate: 0.03,
+          feedback: "At ~3% a year, $100 keeps its number but loses buying power over time — which is why long-term money often needs to grow, not just sit." },
+        checks: [
+          { q: "What does inflation do to the buying power of cash over time?", options: ["Increases it", "Leaves it the same", "Slowly reduces it"], correct: 2,
+            explain: "The dollar amount stays the same, but rising prices mean it buys less — buying power slowly erodes." },
+          { q: "Why is inflation a reason to invest long-term money?", options: ["Investing eliminates inflation", "Growth can help money keep up with rising prices", "Inflation only affects stocks"], correct: 1,
+            explain: "Over long periods, investment growth can outpace inflation, helping money hold or gain real buying power — though it's never guaranteed." }
+        ],
+        takeaway: "Cash is safe in number but loses buying power to inflation over time. Long-term growth fights back.",
+        connection: "Vestari's Portfolio Lab has an inflation view that shows the difference between a future dollar amount and its real buying power."
+      }
+    ]
+  },
+  {
+    id: "m2", title: "Investment Basics", mins: 12,
+    blurb: "What stocks, bonds, and cash actually are.",
+    lessons: [
+      {
+        id: "m2l1", title: "Stocks: Owning a Piece", mins: 4,
+        objective: "Explain what a stock is and why its price moves.",
+        opening: "If your favorite company sold tiny slices of itself, and you bought one, you'd own a real piece of it. That slice is a stock.",
+        explanation: [
+          "A **stock** (or 'share') is a small piece of ownership in a company. Own a share of a company and you own a tiny fraction of that business.",
+          "When the company does well and people expect it to keep growing, demand for its shares can push the price up. When things look worse, the price can fall. Prices move constantly as expectations change.",
+          "Over long periods, stocks as a group have historically offered the strongest growth of the basic asset types — but with the biggest short-term swings. More growth potential, more bumpiness."
+        ],
+        activity: { type: "predict", prompt: "A company reports much higher profits than expected. What usually happens to its stock price in the short term?",
+          options: ["Tends to rise", "Tends to fall", "Never changes"], correct: 0,
+          reveal: "Better-than-expected results often raise expectations for the company, which can push the share price up. (Not a rule — just a common pattern.)" },
+        checks: [
+          { q: "What do you actually own when you buy a stock?", options: ["A loan to the company", "A small piece of the company", "A guarantee of profit"], correct: 1,
+            explain: "A stock is partial ownership — you own a fraction of the business itself." },
+          { q: "Why do stocks have bigger short-term swings than cash?", options: ["They're backed by the government", "Their value depends on changing expectations about the business", "They can't lose value"], correct: 1,
+            explain: "Share prices move with shifting expectations about the company and economy, which makes them bounce more than cash." }
+        ],
+        takeaway: "A stock is ownership. Higher growth potential over time, bigger bumps along the way.",
+        connection: "In Vestari, 'U.S. Stocks' and 'International Stocks' are the growth engine of your sample portfolio."
+      },
+      {
+        id: "m2l2", title: "Bonds: Lending for Interest", mins: 4,
+        objective: "Explain what a bond is and how it differs from a stock.",
+        opening: "Instead of *owning* a slice of a company, imagine *lending* money to one — or to the government — and getting paid interest for it. That's a bond.",
+        explanation: [
+          "A **bond** is essentially a loan. You lend money to a government or company, and in return they pay you interest over time and repay the original amount later.",
+          "Because you're a lender (not an owner), bonds usually behave more calmly than stocks. **Government bonds** are considered among the safest; **corporate bonds** (loans to companies) typically pay a bit more interest for a bit more risk.",
+          "Bonds are the steadier part of a portfolio. They usually don't grow as much as stocks over long periods, but they tend to move more gently — which helps cushion the ride when stocks fall."
+        ],
+        activity: { type: "sort", prompt: "Stock or bond?",
+          items: [
+            { text: "You own part of the business", answer: "Stock" },
+            { text: "You lend money and earn interest", answer: "Bond" },
+            { text: "Usually the steadier of the two", answer: "Bond" },
+            { text: "Usually the higher long-term growth", answer: "Stock" }
+          ] },
+        checks: [
+          { q: "When you buy a bond, your role is best described as a...", options: ["Owner", "Lender", "Employee"], correct: 1,
+            explain: "A bond makes you a lender — you're owed interest and repayment, not a slice of ownership." },
+          { q: "Why do people hold bonds alongside stocks?", options: ["Bonds always rise when stocks fall", "Bonds tend to move more gently and can cushion downturns", "Bonds guarantee profit"], correct: 1,
+            explain: "Bonds are generally steadier than stocks, which can soften a portfolio's overall swings — though they don't always rise when stocks fall." }
+        ],
+        takeaway: "A bond is a loan that pays interest. Steadier than stocks, usually lower growth.",
+        connection: "Vestari splits bonds into Government, Corporate, and Short-Term in the detailed portfolio view."
+      },
+      {
+        id: "m2l3", title: "Cash: Safe and Ready", mins: 4,
+        objective: "Describe the role of cash and its main trade-off.",
+        opening: "Cash is the money you can spend right now — in a savings or checking account. It's the calmest thing in any portfolio, but calm has a cost.",
+        explanation: [
+          "**Cash** (and cash-like holdings such as savings accounts or money-market funds) barely changes in value and is easy to access quickly. It's the safe anchor of a portfolio.",
+          "Its job is stability and readiness — covering near-term needs and giving you something that won't drop when markets do.",
+          "The trade-off, from the last module: cash loses buying power to inflation over long periods. So it's great for safety and short-term needs, but usually not where you want *all* your long-term money."
+        ],
+        activity: { type: "predict", prompt: "The stock market drops 20% in a month. What happens to the cash portion of a portfolio?",
+          options: ["It drops about 20% too", "It stays roughly the same", "It rises 20%"], correct: 1,
+          reveal: "Cash barely moves with the market — that stability is exactly why portfolios hold some. It's the steady anchor." },
+        checks: [
+          { q: "What's cash's main strength in a portfolio?", options: ["Highest long-term growth", "Stability and quick access", "It beats inflation easily"], correct: 1,
+            explain: "Cash is about safety and readiness — stable value you can reach fast." },
+          { q: "What's cash's main weakness over the long run?", options: ["It's too volatile", "It loses buying power to inflation", "It can't be withdrawn"], correct: 1,
+            explain: "Because it barely grows, inflation slowly eats its real value over long periods." }
+        ],
+        takeaway: "Cash = stability and access. Weakness = it loses ground to inflation over time.",
+        connection: "Vestari raises your cash slice when you say you'll need quick access or lack an emergency fund."
+      }
+    ]
+  },
+  {
+    id: "m3", title: "Risk and Return", mins: 12,
+    blurb: "Uncertainty, volatility, and the real chance of loss.",
+    lessons: [
+      {
+        id: "m3l1", title: "The Risk–Return Trade-off", mins: 4,
+        objective: "Explain why higher potential returns come with higher risk.",
+        opening: "If someone offered you a guaranteed way to double your money with zero risk, you should be suspicious. In investing, higher potential reward and higher risk come together — always.",
+        explanation: [
+          "**Return** is how much an investment gains (or loses). **Risk** is the uncertainty around that — how much the value might swing, including the chance of losing money.",
+          "The core rule: investments with higher growth *potential* generally come with higher risk. Stocks can grow a lot but drop hard; cash barely grows but barely moves. There's no high reward without accepting some risk.",
+          "Anyone promising high returns with no risk is either mistaken or misleading you. This trade-off is one of the most important ideas in all of investing."
+        ],
+        activity: { type: "rank", prompt: "Order these from lowest risk to highest risk.",
+          items: ["Cash", "Government Bonds", "Diversified Stocks"],
+          correctOrder: ["Cash", "Government Bonds", "Diversified Stocks"],
+          feedback: "Cash is steadiest, government bonds sit in the middle, stocks have the biggest swings — and the most growth potential." },
+        checks: [
+          { q: "An ad promises 'high returns, no risk.' What should you think?", options: ["Great deal, invest fast", "Be very skeptical — that combination isn't realistic", "Only invest half"], correct: 1,
+            explain: "High return with zero risk doesn't exist. Claims like that are a classic warning sign." },
+          { q: "Why do stocks offer more growth potential than cash?", options: ["They're guaranteed by banks", "You're taking on more risk in exchange", "They never fall"], correct: 1,
+            explain: "The extra growth potential is compensation for taking on more risk and bigger swings." }
+        ],
+        takeaway: "More potential reward always means more risk. No exceptions, no shortcuts.",
+        connection: "Vestari's risk spectrum visual lines up Cash → Bonds → Stocks for exactly this reason."
+      },
+      {
+        id: "m3l2", title: "Volatility: The Size of the Swings", mins: 4,
+        objective: "Define volatility and explain why it isn't the same as loss.",
+        opening: "Two roads both get you to the same town. One is smooth; the other is full of bumps. Volatility is how bumpy the investment road is — not whether you arrive.",
+        explanation: [
+          "**Volatility** measures how much an investment's value jumps up and down over time. High volatility means big swings in both directions; low volatility means a smoother ride.",
+          "A key point: volatility is not the same as losing money. A volatile investment might swing down *and* back up. The swings only become a real loss if you sell while it's down.",
+          "This is why time horizon matters so much. If you won't need the money for years, short-term volatility is bumps you can ride through. If you need it next month, those same bumps are dangerous."
+        ],
+        activity: { type: "predict", prompt: "A stock drops 15%, then rises 18% over the next year. If you didn't sell, did you lock in a loss?",
+          options: ["Yes, the 15% drop is permanent", "No — you only lock in a loss if you sell while down"], correct: 1,
+          reveal: "A paper dip isn't a realized loss. Staying invested through the swing is how volatility stays 'just bumps.' (Recoveries aren't guaranteed, though.)" },
+        checks: [
+          { q: "Volatility measures...", options: ["How much something loses", "How much its value swings up and down", "How safe it is guaranteed to be"], correct: 1,
+            explain: "Volatility is the size of the swings in both directions — not a measure of loss by itself." },
+          { q: "When does volatility turn into an actual loss?", options: ["Immediately when price drops", "When you sell while the value is down", "Never"], correct: 1,
+            explain: "A drop on paper only becomes a realized loss if you sell at that lower price." }
+        ],
+        takeaway: "Volatility = size of swings, not loss itself. Selling low is what turns a dip into a loss.",
+        connection: "Vestari's 'rough year' view shows how much a mix might swing — so the bumps feel real before they happen."
+      },
+      {
+        id: "m3l3", title: "The Real Possibility of Loss", mins: 4,
+        objective: "Acknowledge that investing can lose money, and what reduces (not removes) that risk.",
+        opening: "Every honest investing lesson has to include this sentence: you can lose money investing. Not might-sound-scary-but-won't-happen. Actually lose it.",
+        explanation: [
+          "Investing involves real risk, including the possible loss of the money you put in. Prices can fall and stay down. Individual companies can fail entirely. This is true no matter how careful you are.",
+          "What good investing does is *manage* risk, not erase it. Spreading money across many investments (diversification), matching risk to your time horizon, and not betting everything on one thing all reduce the odds of a catastrophic loss.",
+          "But 'reduce' is the honest word. Nothing — not diversification, not bonds, not any strategy — guarantees you won't lose money. Anyone who tells you otherwise isn't being straight with you."
+        ],
+        activity: { type: "predict", prompt: "Does spreading money across many investments guarantee you won't lose money?",
+          options: ["Yes, it's totally safe", "No — it reduces risk but can't remove it"], correct: 1,
+          reveal: "Diversification lowers the chance of a total wipeout, but a broad downturn can still pull a whole portfolio down. Risk is managed, never erased." },
+        checks: [
+          { q: "Which statement is honest about investing?", options: ["With the right strategy, loss is impossible", "Investing can lose money; good strategy manages risk but can't remove it", "Only beginners lose money"], correct: 1,
+            explain: "Real investing always carries the possibility of loss — strategy reduces it, never eliminates it." },
+          { q: "What does diversification actually do about risk?", options: ["Eliminates it", "Reduces the chance of a catastrophic single loss", "Increases it"], correct: 1,
+            explain: "Spreading out lowers the damage any single bad investment can do — but can't protect against everything." }
+        ],
+        takeaway: "You can lose money investing. Smart choices reduce the risk; nothing removes it.",
+        connection: "Every Vestari portfolio carries this disclaimer for a reason — the sample mixes manage risk, they don't promise safety."
+      }
+    ]
+  },
+  {
+    id: "m4", title: "Diversification", mins: 12,
+    blurb: "Concentration risk, asset classes, and why things move together.",
+    lessons: [
+      {
+        id: "m4l1", title: "Don't Put All Your Eggs in One Basket", mins: 4,
+        objective: "Explain concentration risk with a concrete example.",
+        opening: "Picture putting every dollar you have into one company's stock. If it soars, you're thrilled. If it collapses, you lose everything. That all-or-nothing bet is concentration risk.",
+        explanation: [
+          "**Concentration risk** is the danger of having too much riding on a single investment. The more concentrated you are, the more your whole outcome depends on one thing going right.",
+          "**Diversification** is the fix: spreading money across many different investments so no single one can sink you. If you own pieces of hundreds of companies and one fails, it barely dents you.",
+          "This is the closest thing to a 'free lunch' in investing — reducing risk without necessarily giving up expected long-term growth, just by spreading out."
+        ],
+        activity: { type: "compare", prompt: "One company's stock drops 50%. Compare the damage.",
+          a: { label: "All money in that 1 stock", result: "-50%" },
+          b: { label: "That stock is 1 of 100 you own", result: "about -0.5%" },
+          feedback: "Same company, same crash — but spreading across 100 holdings turns a devastating 50% hit into a rounding error." },
+        checks: [
+          { q: "What is concentration risk?", options: ["The risk of owning too many things", "The risk of too much riding on one investment", "The risk of saving too much"], correct: 1,
+            explain: "Concentration means one investment carries too much of your outcome — a single failure hurts badly." },
+          { q: "Why is diversification called close to a 'free lunch'?", options: ["It guarantees profit", "It can reduce risk without necessarily lowering expected long-term growth", "It removes all fees"], correct: 1,
+            explain: "Spreading out lowers single-investment risk without necessarily sacrificing expected growth — a rare win-win." }
+        ],
+        takeaway: "Betting everything on one investment is concentration risk. Spreading out is the fix.",
+        connection: "Vestari never puts your sample portfolio in one thing — it always spreads across asset classes."
+      },
+      {
+        id: "m4l2", title: "Asset Classes: Different Jobs", mins: 4,
+        objective: "Name the main asset classes and the role each plays.",
+        opening: "A good team needs different players — someone fast, someone strong, someone steady. A portfolio works the same way, with different asset classes doing different jobs.",
+        explanation: [
+          "An **asset class** is a group of investments that behave similarly. The main ones for beginners: **stocks** (growth), **bonds** (stability), and **cash** (safety and access).",
+          "True diversification means spreading across *different* asset classes — not just many stocks. Owning 50 stocks is better than one, but they can still all fall together in a market crash. Adding bonds and cash brings in things that behave differently.",
+          "You can diversify *within* a class too: U.S. and international stocks, large and small companies, government and corporate bonds. Each adds another layer of 'not everything moving the same way at once.'"
+        ],
+        activity: { type: "sort", prompt: "Match each asset class to its main job.",
+          items: [
+            { text: "Growth over the long term", answer: "Stocks" },
+            { text: "Stability and cushioning drops", answer: "Bonds" },
+            { text: "Safety and quick access", answer: "Cash" }
+          ] },
+        checks: [
+          { q: "Why isn't owning 50 different stocks fully diversified?", options: ["50 isn't enough companies", "Stocks can still all fall together in a crash", "Stocks never fall"], correct: 1,
+            explain: "They're all one asset class, so a broad downturn can hit them together. Adding bonds/cash diversifies across *classes*." },
+          { q: "What's the main job of the stock asset class?", options: ["Stability", "Growth", "Quick access"], correct: 1,
+            explain: "Stocks are the growth engine; bonds bring stability and cash brings access." }
+        ],
+        takeaway: "Real diversification spreads across asset classes that behave differently — not just many stocks.",
+        connection: "Vestari's four classes (U.S. stocks, international stocks, bonds, cash) each play a distinct role in your mix."
+      },
+      {
+        id: "m4l3", title: "Why Investments Move Together", mins: 4,
+        objective: "Explain correlation and why diversification has limits.",
+        opening: "In a really bad market crash, you'll often hear 'everything fell at once.' Why would unrelated investments drop together? The answer is correlation — and it's why diversification helps but can't save you from everything.",
+        explanation: [
+          "**Correlation** describes how much two investments tend to move together. Things with low correlation move independently — when one zigs, the other might zag, which is what makes diversification work.",
+          "Different asset classes often have lower correlation. Bonds and stocks, for example, don't always move the same way — so holding both can smooth the ride. But 'don't always' is important: it's a tendency, not a guarantee.",
+          "In severe crises, correlations can spike — many things fall together as people rush to sell. This is the honest limit of diversification: it helps a lot in normal times and softens most downturns, but it can't fully protect against a broad, everything-falls event."
+        ],
+        activity: { type: "predict", prompt: "True or false: because bonds and stocks don't always move together, a diversified portfolio can never lose value.",
+          options: ["True", "False"], correct: 1,
+          reveal: "False. Diversification softens most downturns, but in a broad crisis many assets can fall together. It reduces risk — it doesn't remove it." },
+        checks: [
+          { q: "What does low correlation between two investments mean?", options: ["They move together closely", "They tend to move independently", "They're both guaranteed to rise"], correct: 1,
+            explain: "Low correlation means they don't move in lockstep — one can hold up when the other falls." },
+          { q: "What's the honest limit of diversification?", options: ["It has no limits", "In severe crises, many assets can fall together", "It only works for stocks"], correct: 1,
+            explain: "When correlations spike in a crisis, diversification can't prevent a broad decline — it just usually softens it." }
+        ],
+        takeaway: "Diversification works because assets don't always move together — but in crises they can, so it limits risk without erasing it.",
+        connection: "Vestari's scenarios show bonds and stocks reacting differently — and also remind you diversification doesn't eliminate losses."
+      }
+    ]
+  },
+  {
+    id: "m5", title: "Building a Portfolio", mins: 12,
+    blurb: "Asset allocation, time horizon, and willingness vs. ability to take risk.",
+    lessons: [
+      {
+        id: "m5l1", title: "Asset Allocation: The Big Decision", mins: 4,
+        objective: "Explain what asset allocation is and why it matters so much.",
+        opening: "People often obsess over picking the 'perfect' investment. But research consistently points to a bigger lever: how you split your money across asset classes in the first place.",
+        explanation: [
+          "**Asset allocation** is how you divide money among stocks, bonds, and cash. It's the single biggest driver of how your portfolio behaves — more than which specific investments you pick.",
+          "A stock-heavy allocation means more growth potential and bigger swings. A bond-and-cash-heavy allocation means steadier value and less growth. The split *is* the strategy.",
+          "There's no single 'correct' allocation. The right one depends on your goals, your timeline, and how much risk you can handle — which is exactly what the next lessons cover."
+        ],
+        activity: { type: "allocate", prompt: "Build a mix that totals 100%. Watch how the balance shifts between growth and stability.",
+          feedback: "There's no one right answer — more stocks tilts toward growth, more bonds/cash toward stability. The split is the decision." },
+        checks: [
+          { q: "What is asset allocation?", options: ["Picking the best single stock", "How you split money across stocks, bonds, and cash", "The fees you pay"], correct: 1,
+            explain: "Allocation is the split across asset classes — the biggest driver of portfolio behavior." },
+          { q: "What matters more for how a portfolio behaves?", options: ["The specific investments picked", "The overall asset allocation", "The account name"], correct: 1,
+            explain: "The broad allocation tends to drive behavior more than individual picks." }
+        ],
+        takeaway: "How you split across asset classes is the biggest decision — bigger than which investments you pick.",
+        connection: "Vestari's whole portfolio builder is an asset-allocation engine — it's deciding your split and explaining why."
+      },
+      {
+        id: "m5l2", title: "Time Horizon Changes Everything", mins: 4,
+        objective: "Explain how time horizon should shape an allocation.",
+        opening: "Two people, same age, same income. One needs their money in 2 years for a car; the other won't touch it for 40 years. Should they invest the same way? Not even close.",
+        explanation: [
+          "**Time horizon** is how long until you need the money. It's one of the most important inputs to an allocation — arguably more than age by itself.",
+          "A **long** horizon can handle more stocks, because there's time to recover from downturns before you need the money. A **short** horizon calls for more bonds and cash, because a badly-timed drop could hit right when you need to withdraw.",
+          "Notice this isn't about age directly. A 70-year-old investing for grandchildren decades away has a long horizon; a 20-year-old saving for next year's expenses has a short one. The *timeline for this money* is what matters."
+        ],
+        activity: { type: "compare", prompt: "Same person, two different goals. Which allocation fits each?",
+          a: { label: "Car in 2 years", result: "More bonds & cash" },
+          b: { label: "Retirement in 40 years", result: "More stocks" },
+          feedback: "Short horizon → protect it. Long horizon → let it grow. Same person, opposite allocations, because the timelines differ." },
+        checks: [
+          { q: "Why can a long time horizon handle more stocks?", options: ["Stocks are safer long-term guaranteed", "There's time to recover from downturns before you need the money", "Long horizons avoid all risk"], correct: 1,
+            explain: "Time to recover is the key — short-term drops can heal before a distant deadline." },
+          { q: "What should drive the allocation — age alone, or the money's timeline?", options: ["Age alone", "The timeline for this specific money", "Neither"], correct: 1,
+            explain: "It's the horizon for *this money* that matters; age is only a rough proxy for it." }
+        ],
+        takeaway: "Long horizon → more growth assets. Short horizon → more stability. The timeline, not age, leads.",
+        connection: "Vestari deliberately weighs your time-horizon answer heavily — and doesn't let age alone decide your mix."
+      },
+      {
+        id: "m5l3", title: "Willing vs. Able to Take Risk", mins: 4,
+        objective: "Distinguish risk tolerance (willingness) from risk capacity (ability).",
+        opening: "You might *feel* totally calm about big market swings. But if you'd be forced to sell during a crash to pay rent, your feelings don't matter — you can't actually afford the risk. These are two different things.",
+        explanation: [
+          "**Risk tolerance** (willingness) is how comfortable you *feel* with ups and downs — your emotional and psychological comfort with volatility.",
+          "**Risk capacity** (ability) is how much risk you can *actually afford* — based on your timeline, your income stability, your emergency fund, and whether you'd be forced to sell at a bad time.",
+          "Good allocation respects the *lower* of the two. Being brave doesn't help if a surprise forces you to sell during a dip. And being able to afford risk doesn't mean you should take more than you can emotionally stick with — because panic-selling ruins even a 'correct' plan."
+        ],
+        activity: { type: "sort", prompt: "Willingness (feeling) or ability (affording)?",
+          items: [
+            { text: "You stay calm when markets drop", answer: "Willingness" },
+            { text: "You have a solid emergency fund", answer: "Ability" },
+            { text: "You won't need this money for 20 years", answer: "Ability" },
+            { text: "Big swings make you anxious", answer: "Willingness" }
+          ] },
+        checks: [
+          { q: "What's risk capacity (ability)?", options: ["How risk makes you feel", "How much risk you can actually afford to take", "How much you've invested"], correct: 1,
+            explain: "Capacity is about what your situation can withstand — timeline, income, cushion — regardless of feelings." },
+          { q: "If willingness is high but ability is low, what should guide the allocation?", options: ["The high willingness", "The lower of the two (ability)", "Neither"], correct: 1,
+            explain: "Respect the lower one — you shouldn't take risk you can't afford, even if you feel fine about it." }
+        ],
+        takeaway: "Feeling okay with risk (willingness) and being able to afford it (ability) are different. Respect the lower one.",
+        connection: "Vestari asks about both — your comfort with a 20% drop *and* your income stability, emergency fund, and timeline."
+      }
+    ]
+  },
+  {
+    id: "m6", title: "Long-Term Growth", mins: 12,
+    blurb: "Compounding, regular contributions, and the drag of fees.",
+    lessons: [
+      {
+        id: "m6l1", title: "Compounding: Growth on Growth", mins: 4,
+        objective: "Explain compounding and why time is its most powerful ingredient.",
+        opening: "Earn a return on your money. Next year, you earn a return on your money *plus* last year's return. Then on all of that. This snowball is compounding, and over decades it gets dramatic.",
+        explanation: [
+          "**Compounding** means earning returns on your past returns, not just on your original money. Each year's growth joins the pile that grows next year.",
+          "In the early years the effect looks small. But because it builds on itself, the growth accelerates over long periods — most of the dramatic results come in the later years.",
+          "This is why *time* is compounding's most powerful ingredient. Starting earlier, even with small amounts, can matter more than starting later with larger ones. The runway is the superpower."
+        ],
+        activity: { type: "compounding", prompt: "Explore how a starting amount grows at an assumed steady return. Watch the later years accelerate.",
+          start: 1000, monthly: 50, years: 30, rate: 0.07,
+          feedback: "Notice the curve bends upward — later years add far more than early ones. That's compounding, and time is what powers it. (A steady return is a simplification; real returns vary.)" },
+        checks: [
+          { q: "What is compounding?", options: ["Earning returns only on your original money", "Earning returns on your past returns too", "A type of fee"], correct: 1,
+            explain: "Compounding means your returns themselves start earning returns — growth on growth." },
+          { q: "What makes compounding so powerful?", options: ["Large amounts only", "Time — it builds on itself over long periods", "Avoiding all risk"], correct: 1,
+            explain: "The longer it runs, the more it snowballs; time is the key ingredient." }
+        ],
+        takeaway: "Compounding is growth on growth. Time is its superpower — starting early beats starting big.",
+        connection: "Vestari's long-term simulator shows this curve bending upward over the years you choose."
+      },
+      {
+        id: "m6l2", title: "The Power of Regular Contributions", mins: 4,
+        objective: "Explain why adding money steadily is so effective.",
+        opening: "You don't need a big pile to start. Adding a little, regularly, over a long time is one of the most reliable ways money grows — and it sidesteps the impossible task of timing the market.",
+        explanation: [
+          "**Regular contributions** mean adding money on a steady schedule — say, every month — rather than trying to invest one big lump at the 'perfect' time.",
+          "This does two things. First, it steadily grows the amount that's compounding. Second, by buying at many different times, you automatically buy some when prices are high and some when they're low, which spreads out your timing risk.",
+          "Nobody can reliably predict the best moment to invest. Contributing regularly means you don't have to — you're always participating, through ups and downs."
+        ],
+        activity: { type: "compounding", prompt: "Compare a one-time $1,000 vs. adding $50 every month. Adjust and see the gap grow over time.",
+          start: 1000, monthly: 50, years: 20, rate: 0.07,
+          feedback: "Steady monthly adds keep feeding the snowball — over decades, consistent contributions usually do more heavy lifting than the starting amount." },
+        checks: [
+          { q: "Why do regular contributions help with timing?", options: ["They guarantee buying at the bottom", "They spread purchases across high and low prices", "They avoid the market entirely"], correct: 1,
+            explain: "Buying steadily means you catch a mix of prices instead of betting everything on one moment." },
+          { q: "Can anyone reliably time the perfect moment to invest?", options: ["Yes, with practice", "No — which is why steady contributing works", "Only professionals"], correct: 1,
+            explain: "Consistent timing of the market isn't reliably possible; regular contributing sidesteps the need to." }
+        ],
+        takeaway: "Adding money steadily grows the snowball and spreads out timing risk. Consistency beats perfect timing.",
+        connection: "Vestari's portfolio builder asks if you'll contribute regularly — and the simulator lets you model monthly adds."
+      },
+      {
+        id: "m6l3", title: "Fees: The Silent Drag", mins: 4,
+        objective: "Explain how fees quietly reduce long-term returns.",
+        opening: "A 1% fee sounds tiny. Over a few decades of compounding, that 'tiny' number can quietly cost you a surprising chunk of your final total. Fees matter more than they look.",
+        explanation: [
+          "A **fee** is what you pay to invest — often charged as a small yearly percentage of your money (called an expense ratio for funds).",
+          "The problem is that fees compound against you. Every dollar paid in fees is a dollar that can't grow — and neither can the growth it *would* have earned. Over decades, even a 1% difference can meaningfully shrink the final amount.",
+          "This is why low-cost investing gets so much attention. You can't control what markets do, but you *can* control how much you pay — making fees one of the few sure things you can improve."
+        ],
+        activity: { type: "fees", prompt: "Compare two identical portfolios — one with a 0.1% fee, one with a 1% fee — over 30 years.",
+          start: 10000, years: 30, rate: 0.07, lowFee: 0.001, highFee: 0.01,
+          feedback: "Same returns, same everything — except fees. Over 30 years the gap is striking. Fees are a cost you can actually control. (Illustrative, assuming a steady return.)" },
+        checks: [
+          { q: "Why do small fees matter so much over time?", options: ["They don't, they're tiny", "They compound against you — lost money can't grow", "They only apply once"], correct: 1,
+            explain: "Fees eat money that would otherwise compound, so the drag grows over decades." },
+          { q: "What makes fees unusual compared to market returns?", options: ["Fees are unpredictable", "Fees are something you can actually control", "Fees guarantee profit"], correct: 1,
+            explain: "You can't control markets, but you can choose lower-cost options — a rare controllable factor." }
+        ],
+        takeaway: "Fees compound against you. Markets you can't control; fees you can.",
+        connection: "Vestari's fee-comparison activity makes this gap visible side by side."
+      }
+    ]
+  },
+  {
+    id: "m7", title: "Market Changes", mins: 12,
+    blurb: "Bull markets, downturns, and changing interest rates.",
+    lessons: [
+      {
+        id: "m7l1", title: "Bull Markets and Downturns", mins: 4,
+        objective: "Define bull and bear markets and set realistic expectations.",
+        opening: "Markets don't move in a straight line. They have long stretches of rising prices and painful stretches of falling ones. Both are normal — expecting only the good part sets you up to panic during the bad.",
+        explanation: [
+          "A **bull market** is a sustained period of rising prices and optimism. A **bear market** (or downturn) is a sustained period of falling prices — commonly described as a drop of around 20% or more from a recent high.",
+          "Both are a normal part of how markets work. Over long histories, markets have generally trended upward, but that path has always included significant downturns along the way.",
+          "The practical lesson: downturns aren't a sign something is broken — they're part of the deal. Expecting them in advance is what helps investors avoid panic-selling when one arrives."
+        ],
+        activity: { type: "predict", prompt: "A long-term investor sees the market fall 25%. Based on history, is this a sign to assume the market is permanently broken?",
+          options: ["Yes, markets don't recover", "No — downturns have historically been a normal, recurring part of investing"], correct: 1,
+          reveal: "Downturns are painful but historically normal and recurring. Expecting them is what keeps investors from panic-selling. (History isn't a guarantee of the future, though.)" },
+        checks: [
+          { q: "What's a bear market?", options: ["A period of rising prices", "A sustained drop, commonly ~20%+ from a high", "A type of investment"], correct: 1,
+            explain: "A bear market is a sustained decline, often defined as roughly 20% or more off a recent peak." },
+          { q: "How should a long-term investor view downturns?", options: ["As proof investing is broken", "As a normal, expected part of the journey", "As something that never happens"], correct: 1,
+            explain: "Downturns are a recurring, normal feature — expecting them helps avoid panic." }
+        ],
+        takeaway: "Rising (bull) and falling (bear) stretches are both normal. Expecting downturns prevents panic.",
+        connection: "Vestari's Portfolio Lab lets you run both bull markets and crashes to feel how your mix handles each."
+      },
+      {
+        id: "m7l2", title: "Interest Rates and Why They Move Markets", mins: 4,
+        objective: "Explain in simple terms how interest rate changes ripple through investments.",
+        opening: "You'll hear news about 'the Fed raising rates' and markets reacting. Interest rates are a kind of background dial for the whole economy — and moving it affects almost everything.",
+        explanation: [
+          "**Interest rates** are the cost of borrowing money. In the U.S., the Federal Reserve influences them to help manage the economy — raising rates to cool things down (often to fight inflation), lowering them to encourage activity.",
+          "When rates rise, existing bonds generally become less attractive (new ones pay more), so bond prices tend to fall. Higher borrowing costs can also pressure company profits and stock prices. When rates fall, the reverse often happens.",
+          "You don't need to predict rate moves to be a good investor. But understanding that rates affect both stocks and bonds — in different ways — helps explain why markets move on rate news."
+        ],
+        activity: { type: "predict", prompt: "Interest rates rise sharply. What tends to happen to existing bond prices?",
+          options: ["They tend to rise", "They tend to fall", "Nothing"], correct: 1,
+          reveal: "When new bonds pay more, existing lower-paying bonds become less attractive, so their prices tend to drop. (A tendency, shown simplified — not a precise rule.)" },
+        checks: [
+          { q: "Who influences interest rates in the U.S.?", options: ["Individual companies", "The Federal Reserve", "Stock exchanges"], correct: 1,
+            explain: "The Federal Reserve influences interest rates to help manage the economy." },
+          { q: "When interest rates rise, existing bond prices generally...", options: ["Rise", "Fall", "Stay fixed forever"], correct: 1,
+            explain: "Newer bonds paying more make existing ones less attractive, pushing their prices down." }
+        ],
+        takeaway: "Rates are the economy's background dial. Rising rates tend to pressure bond (and often stock) prices.",
+        connection: "Vestari's 'Rising Interest Rates' scenario shows bonds and stocks reacting differently to a rate move."
+      },
+      {
+        id: "m7l3", title: "Nobody Can Predict the Short Term", mins: 4,
+        objective: "Explain why short-term market timing is unreliable and what to do instead.",
+        opening: "Every year, confident experts predict exactly where markets will go. Every year, many are wrong. If the professionals can't reliably time the short term, that tells you something important.",
+        explanation: [
+          "Short-term market movements depend on countless unpredictable factors — news, emotions, surprises. Even highly-paid professionals cannot reliably predict them, and many underperform simple strategies over time.",
+          "This isn't a reason to despair — it's freeing. If timing can't be done reliably, you don't have to try. Instead, the evidence points toward boring-but-effective habits: diversify, keep costs low, contribute regularly, and stay invested for the long term.",
+          "The biggest risk for most long-term investors isn't picking the 'wrong' investment — it's reacting emotionally to short-term noise and abandoning a sound plan at the worst moment."
+        ],
+        activity: { type: "predict", prompt: "Given that short-term timing is unreliable, what's the better focus for a beginner?",
+          options: ["Guessing next month's market", "Diversify, keep costs low, contribute regularly, stay long-term"], correct: 1,
+          reveal: "Since reliable timing isn't realistic, the durable edge is in habits you control — not predictions you can't make." },
+        checks: [
+          { q: "Can professionals reliably predict short-term market moves?", options: ["Yes, consistently", "No — short-term movements are largely unpredictable", "Only in bull markets"], correct: 1,
+            explain: "Short-term timing isn't reliably possible, even for professionals." },
+          { q: "What's the biggest risk for most long-term investors?", options: ["Picking a slightly wrong fund", "Reacting emotionally and abandoning a sound plan", "Contributing too regularly"], correct: 1,
+            explain: "Emotional reactions to short-term noise do more damage than imperfect investment picks." }
+        ],
+        takeaway: "Short-term timing can't be done reliably — so focus on habits you control, and don't panic on noise.",
+        connection: "Vestari teaches the 'why' precisely so you can hold steady instead of reacting to every market swing."
+      }
+    ]
+  },
+  {
+    id: "m8", title: "Investor Decisions", mins: 12,
+    blurb: "Panic selling, chasing hype, and rebalancing.",
+    lessons: [
+      {
+        id: "m8l1", title: "Panic Selling: The Costly Reflex", mins: 4,
+        objective: "Explain why selling during downturns often harms long-term investors.",
+        opening: "Markets drop 30%. Your gut screams 'get out before it gets worse!' That reflex feels like protection. For long-term investors, acting on it is often the single most expensive mistake they make.",
+        explanation: [
+          "**Panic selling** is dumping investments during a downturn out of fear. It feels safe — but it converts a temporary paper loss into a permanent real one, exactly as we saw with volatility.",
+          "Worse, markets' best recovery days often cluster right after the worst drops. Investors who sell in fear frequently miss the rebound, locking in the loss *and* missing the recovery — a double penalty.",
+          "The antidote isn't bravery; it's preparation. Knowing downturns are normal (Module 7), holding only risk you can afford (Module 5), and having an emergency fund (Module 1) all make it far easier to sit still when fear hits."
+        ],
+        activity: { type: "predict", prompt: "The market crashes and a fearful investor sells everything. What two things has he likely done?",
+          options: ["Protected himself fully", "Locked in the loss AND risks missing the recovery"], correct: 1,
+          reveal: "Selling low makes the loss real, and recoveries often come soon after crashes — so panic-sellers frequently get hit twice." },
+        checks: [
+          { q: "Why is panic selling costly?", options: ["It avoids all losses", "It locks in losses and often misses the recovery", "It has no effect"], correct: 1,
+            explain: "Selling low realizes the loss, and missing the rebound compounds the damage." },
+          { q: "What's the best defense against panic selling?", options: ["Bravery in the moment", "Preparation — knowing downturns are normal and holding affordable risk", "Checking prices hourly"], correct: 1,
+            explain: "Preparation beats willpower — the right setup makes sitting still far easier than relying on nerve." }
+        ],
+        takeaway: "Panic selling turns temporary drops into permanent losses and often misses the rebound. Prepare, don't react.",
+        connection: "Vestari's crash scenarios let you *practice* watching a drop without the real-money fear — building the instinct to hold."
+      },
+      {
+        id: "m8l2", title: "Chasing Hype", mins: 4,
+        objective: "Recognize hype-driven investing and why it's dangerous.",
+        opening: "An investment is all over social media. It's already up 300%. Everyone seems to be making money. The fear of missing out is intense — and that feeling is exactly when people get hurt.",
+        explanation: [
+          "**Chasing hype** means buying something mainly because it's popular or has recently soared, rather than because you understand it. By the time something is a viral sensation, much of the gain may already be gone — and the risk is highest.",
+          "Hype often drives prices far above what's reasonable, and these run-ups can reverse brutally. The people posting their gains rarely post their later losses. 'Everyone's doing it' is a social signal, not a sound reason to invest.",
+          "This ties back to Module 3: if something promises huge returns and seems too good to miss, the risk is usually proportionally huge. Understanding *what* you own and *why* is the opposite of — and antidote to — hype-chasing."
+        ],
+        activity: { type: "predict", prompt: "An investment is up 400% and trending everywhere. Your friend says 'we have to buy now before we miss out!' What's the honest read?",
+          options: ["Smart — ride the wave", "FOMO is a warning sign, not a reason; the risk is often highest here"], correct: 1,
+          reveal: "By the time something's viral, much of the move may be over and the risk elevated. Understanding beats FOMO." },
+        checks: [
+          { q: "What's the core problem with chasing hype?", options: ["Buying because it's popular, not because you understand it", "Buying too slowly", "Diversifying too much"], correct: 0,
+            explain: "Hype-chasing substitutes popularity for understanding — right when risk tends to be highest." },
+          { q: "'Everyone is buying it' is...", options: ["A strong reason to invest", "A social signal, not a sound investing reason", "A guarantee of profit"], correct: 1,
+            explain: "Popularity isn't analysis — it's a crowd signal that often marks elevated risk." }
+        ],
+        takeaway: "By the time something's viral, the risk is often highest. Understanding what you own beats FOMO.",
+        connection: "Vestari's 'social-media trend' scenario lets you see how chasing a hyped asset can play out — safely and hypothetically."
+      },
+      {
+        id: "m8l3", title: "Rebalancing: Staying on Course", mins: 4,
+        objective: "Explain what rebalancing is and why investors do it.",
+        opening: "You set a mix of 70% stocks, 30% bonds. A year later, stocks soared and now it's 80/20 — without you touching anything. Your portfolio has quietly drifted into taking more risk than you chose. Rebalancing fixes that.",
+        explanation: [
+          "Over time, a portfolio **drifts**: the parts that grow fastest become a bigger share of the total. A 70/30 mix can become 80/20 after a strong stock run — meaning you're now taking more risk than you originally decided on.",
+          "**Rebalancing** means adjusting back toward your target mix — trimming what's grown oversized and topping up what's shrunk. It's a disciplined way to keep your risk level where you intended.",
+          "Interestingly, rebalancing gently enforces 'sell a bit of what's high, buy a bit of what's low' — the opposite of panic-selling and hype-chasing. It's not about maximizing returns; it's about keeping your risk aligned with your plan."
+        ],
+        activity: { type: "rebalance", prompt: "A 70/30 portfolio drifted to 80/20 after a stock rally. See what rebalancing back to 70/30 does.",
+          drifted: { stocks: 80, bonds: 20 }, target: { stocks: 70, bonds: 30 },
+          feedback: "Rebalancing trims the overgrown stock slice back to target — restoring your chosen risk level. It's discipline, not return-chasing." },
+        checks: [
+          { q: "Why does a portfolio 'drift'?", options: ["Fees change it", "Faster-growing parts become a bigger share over time", "The bank adjusts it"], correct: 1,
+            explain: "Whatever grows fastest grows as a share of the whole, shifting your mix without any action from you." },
+          { q: "What's the main purpose of rebalancing?", options: ["To maximize returns", "To keep your risk level aligned with your plan", "To chase the hottest asset"], correct: 1,
+            explain: "Rebalancing is about risk control — returning to your intended mix, not maximizing gains." }
+        ],
+        takeaway: "Portfolios drift toward more risk as winners grow. Rebalancing restores your chosen mix — discipline over impulse.",
+        connection: "Vestari's rebalancing activity shows a drifted mix snapping back to target so you can see the concept in action."
+      }
+    ]
+  }
+];
+
+// Assessment banks: intro and final test the SAME concepts with DIFFERENT questions.
+const ASSESS_INTRO = [
+  { q: "Money you'll need in a few weeks is best kept in...", options: ["Stocks", "Savings", "Emerging markets"], correct: 1, concept: "Saving vs. investing" },
+  { q: "Inflation mainly affects idle cash by...", options: ["Increasing its buying power", "Reducing its buying power over time", "Doing nothing"], correct: 1, concept: "Inflation" },
+  { q: "Higher potential returns generally come with...", options: ["No extra risk", "Higher risk", "A guarantee"], correct: 1, concept: "Risk & return" },
+  { q: "Diversification mainly works to...", options: ["Guarantee profit", "Reduce reliance on any single investment", "Eliminate all risk"], correct: 1, concept: "Diversification" },
+  { q: "A longer time horizon generally allows...", options: ["More stock exposure", "Only cash", "No investing"], correct: 0, concept: "Time horizon" },
+  { q: "Compounding means earning returns on...", options: ["Only your original money", "Your past returns too", "Fees"], correct: 1, concept: "Compounding" },
+  { q: "Over decades, a 1% higher fee tends to...", options: ["Not matter", "Meaningfully reduce the final amount", "Increase returns"], correct: 1, concept: "Fees" },
+  { q: "Selling everything in a crash usually...", options: ["Protects you fully", "Locks in losses and may miss recovery", "Has no effect"], correct: 1, concept: "Panic selling" }
+];
+const ASSESS_FINAL = [
+  { q: "A fund for next month's concert tickets belongs in...", options: ["Investing", "Saving", "Corporate bonds"], correct: 1, concept: "Saving vs. investing" },
+  { q: "$100 kept as cash for 20 years will...", options: ["Buy more later", "Buy less later due to inflation", "Double"], correct: 1, concept: "Inflation" },
+  { q: "An ad promising 'high returns, zero risk' should make you...", options: ["Invest immediately", "Be very skeptical", "Invest half"], correct: 1, concept: "Risk & return" },
+  { q: "Owning 50 stocks is still not fully diversified because...", options: ["50 is too few", "They can all fall together in a crash", "Stocks never fall"], correct: 1, concept: "Diversification" },
+  { q: "Someone needing money in 2 years should lean toward...", options: ["Mostly stocks", "More bonds and cash", "Only emerging markets"], correct: 1, concept: "Time horizon" },
+  { q: "Compounding's most powerful ingredient is...", options: ["A big starting amount", "Time", "Low fees only"], correct: 1, concept: "Compounding" },
+  { q: "Fees are unusual among investing factors because...", options: ["They're unpredictable", "You can actually control them", "They guarantee returns"], correct: 1, concept: "Fees" },
+  { q: "The biggest risk for most long-term investors is...", options: ["A slightly wrong fund pick", "Reacting emotionally and abandoning the plan", "Contributing too often"], correct: 1, concept: "Panic selling" }
+];
+
+// ============================================================
+//  LEARNING EXPERIENCE  (dashboard, lessons, assessments)
+//  Progress persisted to localStorage (per-device, no account).
+//  Authored in React.createElement to match the compiled bundle.
+// ============================================================
+const h = React.createElement;
+const LS_KEY = "vestari_learn_v1";
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return { lessons: {}, checks: {}, introScore: null, finalScore: null, introConcepts: {}, finalConcepts: {} };
+    return JSON.parse(raw);
+  } catch (e) {
+    return { lessons: {}, checks: {}, introScore: null, finalScore: null, introConcepts: {}, finalConcepts: {} };
+  }
+}
+function saveProgress(p) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(p)); } catch (e) {}
+}
+
+// Flatten lessons for ordering / "next lesson" logic.
+const ALL_LESSONS = CURRICULUM.flatMap(function (m) {
+  return m.lessons.map(function (l) { return { moduleId: m.id, moduleTitle: m.title, lesson: l }; });
+});
+
+// ---- small shared UI ----
+function Pill(props) {
+  return h("span", { style: { display: "inline-block", padding: "4px 10px", borderRadius: 99,
+    background: "rgba(79,122,94,.08)", border: "1px solid " + C.emeraldDim, color: C.emerald,
+    fontSize: 12, fontWeight: 600 } }, props.children);
+}
+function ProgressBar(props) {
+  return h("div", { style: { height: props.h || 6, background: C.bg2, borderRadius: 99, overflow: "hidden" } },
+    h("div", { style: { height: "100%", width: Math.round((props.value || 0) * 100) + "%",
+      background: C.emerald, borderRadius: 99, transition: "width .4s ease" } }));
+}
+
+// ============================================================
+//  ACTIVITY WIDGETS (one per lesson, keyed by activity.type)
+// ============================================================
+function Activity(props) {
+  const a = props.activity;
+  const [done, setDone] = useState(false);
+
+  // --- sort: tap each item to the correct bucket ---
+  if (a.type === "sort") {
+    const [picks, setPicks] = useState({});
+    const buckets = Array.from(new Set(a.items.map(function (i) { return i.answer; })));
+    const allAnswered = a.items.every(function (_, i) { return picks[i] != null; });
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      a.items.map(function (item, i) {
+        return h("div", { key: i, style: { marginBottom: 12, padding: 12, background: C.bg2,
+          borderRadius: 10, border: "1px solid " + C.border } },
+          h("div", { style: { color: C.text, fontSize: 14, marginBottom: 8 } }, item.text),
+          h("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" } },
+            buckets.map(function (b) {
+              const chosen = picks[i] === b;
+              const reveal = picks[i] != null;
+              const correct = b === item.answer;
+              var bg = C.card, bd = C.border, col = C.text;
+              if (reveal && chosen && correct) { bg = "rgba(79,122,94,.10)"; bd = C.emerald; col = C.emerald; }
+              else if (reveal && chosen && !correct) { bg = "rgba(200,90,90,.09)"; bd = "#B4574F"; col = "#B4574F"; }
+              else if (reveal && correct) { bd = C.emerald; col = C.emerald; }
+              return h("button", { key: b, disabled: reveal,
+                onClick: function () { var np = Object.assign({}, picks); np[i] = b; setPicks(np); },
+                style: { padding: "7px 13px", borderRadius: 8, border: "1px solid " + bd, background: bg,
+                  color: col, fontSize: 13, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, b);
+            })));
+      }),
+      allAnswered ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 6 } }, "✓ Nice — the highlighted answers show the right match.") : null);
+  }
+
+  // --- rank: order from low to high ---
+  if (a.type === "rank") {
+    const [order, setOrder] = useState(a.items.slice());
+    const [checked, setChecked] = useState(false);
+    function move(i, dir) {
+      const j = i + dir; if (j < 0 || j >= order.length) return;
+      const no = order.slice(); const tmp = no[i]; no[i] = no[j]; no[j] = tmp; setOrder(no); setChecked(false);
+    }
+    const right = JSON.stringify(order) === JSON.stringify(a.correctOrder);
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      order.map(function (it, i) {
+        return h("div", { key: it, style: { display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "10px 12px", marginBottom: 8, background: C.bg2, borderRadius: 10, border: "1px solid " + C.border } },
+          h("span", { style: { color: C.text, fontSize: 14 } }, (i + 1) + ". " + it),
+          h("span", null,
+            h("button", { onClick: function () { move(i, -1); }, style: btnMini }, "↑"),
+            h("button", { onClick: function () { move(i, 1); }, style: btnMini }, "↓")));
+      }),
+      h("button", { onClick: function () { setChecked(true); }, style: actBtn }, "Check order"),
+      checked ? h("p", { style: { color: right ? C.emerald : "#B4574F", fontSize: 13, lineHeight: 1.6, marginTop: 10 } },
+        right ? "✓ " + a.feedback : "Not quite — try arranging from lowest to highest risk.") : null);
+  }
+
+  // --- compare: two cards side by side ---
+  if (a.type === "compare") {
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { display: "flex", gap: 12, flexWrap: "wrap" } },
+        [a.a, a.b].map(function (c, i) {
+          return h("div", { key: i, style: { flex: "1 1 160px", padding: 16, background: C.bg2,
+            borderRadius: 10, border: "1px solid " + C.border } },
+            h("div", { style: { color: C.muted, fontSize: 13, marginBottom: 6 } }, c.label),
+            h("div", { style: { color: C.text, fontSize: 18, fontWeight: 700 } }, c.result));
+        })),
+      h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, a.feedback));
+  }
+
+  // --- predict: guess, then reveal ---
+  if (a.type === "predict") {
+    const [pick, setPick] = useState(null);
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 6 } }, a.prompt),
+      h("div", { style: { display: "flex", flexDirection: "column", gap: 10, marginTop: 10 } },
+        a.options.map(function (o, i) {
+          const reveal = pick != null; const correct = i === a.correct; const chosen = pick === i;
+          var bg = C.card, bd = C.border;
+          if (reveal && correct) { bg = "rgba(79,122,94,.10)"; bd = C.emerald; }
+          else if (reveal && chosen && !correct) { bg = "rgba(200,90,90,.09)"; bd = "#B4574F"; }
+          return h("button", { key: i, disabled: reveal, onClick: function () { setPick(i); },
+            style: { textAlign: "left", padding: "13px 16px", borderRadius: 10, border: "1px solid " + bd,
+              background: bg, color: C.text, fontSize: 14, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, o);
+        })),
+      pick != null ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, a.reveal) : null);
+  }
+
+  // --- slider: hit a target ---
+  if (a.type === "slider") {
+    const [val, setVal] = useState(a.min);
+    const close = Math.abs(val - a.target) <= a.step;
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { textAlign: "center", color: C.text, fontSize: 24, fontWeight: 700, marginBottom: 10 } },
+        (a.unit || "") + Number(val).toLocaleString()),
+      h("input", { type: "range", min: a.min, max: a.max, step: a.step, value: val,
+        onChange: function (e) { setVal(parseInt(e.target.value)); },
+        style: { width: "100%", accentColor: C.emerald } }),
+      close ? h("p", { style: { color: C.emerald, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, "✓ " + a.feedback) : null);
+  }
+
+  // --- inflation: future buying power ---
+  if (a.type === "inflation") {
+    const future = Math.round(100 / Math.pow(1 + a.rate, a.years));
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { display: "flex", gap: 12, flexWrap: "wrap" } },
+        h("div", { style: { flex: 1, minWidth: 140, padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.border } },
+          h("div", { style: { color: C.muted, fontSize: 13, marginBottom: 6 } }, "$100 today"),
+          h("div", { style: { color: C.text, fontSize: 22, fontWeight: 700 } }, "$100")),
+        h("div", { style: { flex: 1, minWidth: 140, padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.emeraldDim } },
+          h("div", { style: { color: C.muted, fontSize: 13, marginBottom: 6 } }, "Buying power in " + a.years + " yrs"),
+          h("div", { style: { color: C.emerald, fontSize: 22, fontWeight: 700 } }, "~$" + future))),
+      h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, a.feedback));
+  }
+
+  // --- allocate: 3-way sliders to 100 ---
+  if (a.type === "allocate") {
+    const [mix, setMix] = useState({ Stocks: 60, Bonds: 30, Cash: 10 });
+    const total = mix.Stocks + mix.Bonds + mix.Cash;
+    const growth = mix.Stocks;
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      ["Stocks", "Bonds", "Cash"].map(function (k) {
+        return h("div", { key: k, style: { marginBottom: 12 } },
+          h("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 4 } },
+            h("span", { style: { color: C.text, fontSize: 14 } }, k),
+            h("span", { style: { color: C.text, fontSize: 14, fontWeight: 600 } }, mix[k] + "%")),
+          h("input", { type: "range", min: 0, max: 100, value: mix[k],
+            onChange: function (e) { var nm = Object.assign({}, mix); nm[k] = parseInt(e.target.value); setMix(nm); },
+            style: { width: "100%", accentColor: C.emerald } }));
+      }),
+      h("div", { style: { padding: "8px 12px", borderRadius: 8, fontSize: 13, marginTop: 4,
+        background: total === 100 ? "rgba(79,122,94,.08)" : "rgba(192,162,94,.12)",
+        color: total === 100 ? C.emerald : "#9A7B2E", border: "1px solid " + (total === 100 ? C.emeraldDim : C.cash) } },
+        total === 100 ? ("Totals 100% — this mix leans " + (growth >= 60 ? "toward growth" : growth <= 35 ? "toward stability" : "balanced") + ".")
+          : ("Currently " + total + "% — adjust to 100%.")),
+      total === 100 ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 10 } }, a.feedback) : null);
+  }
+
+  // --- compounding: contributed vs growth ---
+  if (a.type === "compounding") {
+    const [monthly, setMonthly] = useState(a.monthly);
+    const [years, setYears] = useState(a.years);
+    const r = a.rate / 12; const n = years * 12;
+    const fvStart = a.start * Math.pow(1 + a.rate, years);
+    const fvContrib = r === 0 ? monthly * n : monthly * ((Math.pow(1 + r, n) - 1) / r);
+    const total = Math.round(fvStart + fvContrib);
+    const contributed = a.start + monthly * n;
+    const growth = Math.max(0, total - contributed);
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 14 } },
+        h("div", { style: { flex: 1, minWidth: 130 } },
+          h("label", { style: { color: C.muted, fontSize: 13 } }, "Monthly: $" + monthly),
+          h("input", { type: "range", min: 0, max: 500, step: 25, value: monthly,
+            onChange: function (e) { setMonthly(parseInt(e.target.value)); }, style: { width: "100%", accentColor: C.emerald } })),
+        h("div", { style: { flex: 1, minWidth: 130 } },
+          h("label", { style: { color: C.muted, fontSize: 13 } }, "Years: " + years),
+          h("input", { type: "range", min: 1, max: 40, value: years,
+            onChange: function (e) { setYears(parseInt(e.target.value)); }, style: { width: "100%", accentColor: C.emerald } }))),
+      h("div", { style: { display: "flex", height: 28, borderRadius: 8, overflow: "hidden", marginBottom: 8 } },
+        h("div", { style: { width: (contributed / total * 100) + "%", background: C.bonds } }),
+        h("div", { style: { width: (growth / total * 100) + "%", background: C.emerald } })),
+      h("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 12 } },
+        h("span", { style: { color: C.muted } }, "You put in: $" + Math.round(contributed).toLocaleString()),
+        h("span", { style: { color: C.emerald, fontWeight: 600 } }, "Growth: $" + Math.round(growth).toLocaleString())),
+      h("div", { style: { color: C.text, fontSize: 18, fontWeight: 700, marginBottom: 8 } }, "Total: ~$" + total.toLocaleString()),
+      h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6 } }, a.feedback));
+  }
+
+  // --- fees: two portfolios ---
+  if (a.type === "fees") {
+    const net = function (fee) { return Math.round(a.start * Math.pow(1 + (a.rate - fee), a.years)); };
+    const low = net(a.lowFee), high = net(a.highFee);
+    const gap = low - high;
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 12 } },
+        h("div", { style: { flex: 1, minWidth: 140, padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.emeraldDim } },
+          h("div", { style: { color: C.muted, fontSize: 13, marginBottom: 6 } }, "0.1% fee"),
+          h("div", { style: { color: C.emerald, fontSize: 20, fontWeight: 700 } }, "$" + low.toLocaleString())),
+        h("div", { style: { flex: 1, minWidth: 140, padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.border } },
+          h("div", { style: { color: C.muted, fontSize: 13, marginBottom: 6 } }, "1.0% fee"),
+          h("div", { style: { color: C.text, fontSize: 20, fontWeight: 700 } }, "$" + high.toLocaleString()))),
+      h("div", { style: { color: "#B4574F", fontSize: 15, fontWeight: 700, marginBottom: 10 } }, "Difference: $" + gap.toLocaleString()),
+      h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6 } }, a.feedback));
+  }
+
+  // --- rebalance: drifted -> target ---
+  if (a.type === "rebalance") {
+    const [rebalanced, setRebalanced] = useState(false);
+    const cur = rebalanced ? a.target : a.drifted;
+    return h("div", null,
+      h("p", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 14 } }, a.prompt),
+      h("div", { style: { display: "flex", gap: 10, marginBottom: 12 } },
+        h("div", { style: { flex: cur.stocks, height: 34, background: C.emerald, borderRadius: 6, display: "grid", placeItems: "center", color: "#FBF9F3", fontSize: 13, fontWeight: 600, transition: "flex .5s ease" } }, cur.stocks + "% stocks"),
+        h("div", { style: { flex: cur.bonds, height: 34, background: C.bonds, borderRadius: 6, display: "grid", placeItems: "center", color: "#FBF9F3", fontSize: 13, fontWeight: 600, transition: "flex .5s ease" } }, cur.bonds + "% bonds")),
+      h("button", { onClick: function () { setRebalanced(!rebalanced); }, style: actBtn },
+        rebalanced ? "Show drifted again" : "Rebalance to target"),
+      rebalanced ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 10 } }, a.feedback) : null);
+  }
+
+  return h("p", { style: { color: C.muted } }, "Interactive activity");
+}
+var btnMini = { background: C.bg2, border: "1px solid " + C.border, color: C.text, borderRadius: 6, cursor: "pointer", padding: "2px 8px", marginLeft: 4, fontFamily: "inherit" };
+var actBtn = { background: C.emerald, color: "#FBF9F3", border: "none", borderRadius: 10, padding: "9px 16px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" };
+
+// ---- Knowledge checks inside a lesson ----
+function KnowledgeChecks(props) {
+  const [answers, setAnswers] = useState({});
+  return h("div", null,
+    props.checks.map(function (c, i) {
+      const picked = answers[i];
+      return h("div", { key: i, style: { marginBottom: 16, padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.border } },
+        h("div", { style: { color: C.text, fontSize: 14, fontWeight: 600, marginBottom: 10 } }, (i + 1) + ". " + c.q),
+        h("div", { style: { display: "flex", flexDirection: "column", gap: 8 } },
+          c.options.map(function (o, oi) {
+            const reveal = picked != null; const correct = oi === c.correct; const chosen = picked === oi;
+            var bg = C.card, bd = C.border;
+            if (reveal && correct) { bg = "rgba(79,122,94,.10)"; bd = C.emerald; }
+            else if (reveal && chosen && !correct) { bg = "rgba(200,90,90,.09)"; bd = "#B4574F"; }
+            return h("button", { key: oi, disabled: reveal,
+              onClick: function () { var na = Object.assign({}, answers); na[i] = oi; setAnswers(na);
+                if (props.onAnswer) props.onAnswer(i, oi === c.correct); },
+              style: { textAlign: "left", padding: "11px 14px", borderRadius: 8, border: "1px solid " + bd,
+                background: bg, color: C.text, fontSize: 14, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, o);
+          })),
+        picked != null ? h("p", { style: { color: picked === c.correct ? C.emerald : C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 10 } },
+          (picked === c.correct ? "✓ Correct. " : "Not quite. ") + c.explain) : null);
+    }));
+}
+
+// ---- Full lesson view ----
+function LessonView(props) {
+  const l = props.lesson; const m = props.module;
+  useEffect(function () { window.scrollTo(0, 0); }, []);
+  return h("div", { style: { maxWidth: 720, margin: "0 auto", padding: "30px 20px 80px" } },
+    h("button", { onClick: props.onBack, style: { background: "none", border: "none", color: C.emerald, fontSize: 14, cursor: "pointer", fontFamily: "inherit", marginBottom: 16, padding: 0 } }, "← Back to Learn"),
+    h("div", { style: { marginBottom: 6 } }, h(Pill, null, m.title + " · " + l.mins + " min")),
+    h("h1", { style: { color: C.text, fontSize: 30, fontWeight: 700, margin: "10px 0 16px", lineHeight: 1.2 } }, l.title),
+    h("div", { style: { padding: 16, background: "rgba(79,122,94,.06)", borderRadius: 10, border: "1px solid " + C.emeraldDim, marginBottom: 24 } },
+      h("div", { style: { color: C.emerald, fontSize: 12, fontWeight: 700, marginBottom: 4 } }, "WHAT YOU'LL LEARN"),
+      h("div", { style: { color: C.text, fontSize: 15, lineHeight: 1.5 } }, l.objective)),
+    // opening
+    h("p", { style: { color: C.text, fontSize: 16, lineHeight: 1.7, marginBottom: 20, fontStyle: "italic" } }, l.opening),
+    // explanation (bold markdown handled simply)
+    l.explanation.map(function (para, i) {
+      return h("p", { key: i, style: { color: C.text, fontSize: 15, lineHeight: 1.7, marginBottom: 14 },
+        dangerouslySetInnerHTML: { __html: para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>') } });
+    }),
+    // activity
+    h("div", { style: { margin: "26px 0", padding: 20, background: C.card, borderRadius: 14, border: "1px solid " + C.border } },
+      h("div", { style: { color: C.emerald, fontSize: 12, fontWeight: 700, marginBottom: 14, letterSpacing: ".04em" } }, "TRY IT"),
+      h(Activity, { activity: l.activity })),
+    // knowledge checks
+    h("h3", { style: { color: C.text, fontSize: 18, fontWeight: 600, margin: "26px 0 14px" } }, "Quick checks"),
+    h(KnowledgeChecks, { checks: l.checks, onAnswer: props.onCheckAnswer }),
+    // takeaway
+    h("div", { style: { margin: "24px 0", padding: 18, background: "rgba(79,122,94,.06)", borderRadius: 12, border: "1px solid " + C.emeraldDim } },
+      h("div", { style: { color: C.emerald, fontSize: 12, fontWeight: 700, marginBottom: 6 } }, "TAKEAWAY"),
+      h("div", { style: { color: C.text, fontSize: 15, lineHeight: 1.6, fontWeight: 500 } }, l.takeaway)),
+    // connection
+    h("div", { style: { padding: 16, background: C.bg2, borderRadius: 10, border: "1px solid " + C.border, marginBottom: 24 } },
+      h("div", { style: { color: C.muted, fontSize: 12, fontWeight: 700, marginBottom: 6 } }, "In Vestari"),
+      h("div", { style: { color: C.text, fontSize: 14, lineHeight: 1.6 } }, l.connection)),
+    // complete button
+    h("div", { style: { display: "flex", gap: 12, flexWrap: "wrap" } },
+      h("button", { onClick: props.onComplete, style: Object.assign({}, actBtn, { padding: "13px 22px", fontSize: 15 }) },
+        props.completed ? "✓ Completed — review done" : "Mark lesson complete"),
+      props.nextLesson ? h("button", { onClick: props.onNext, style: { background: C.bg2, color: C.text, border: "1px solid " + C.border, borderRadius: 10, padding: "13px 22px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } }, "Next lesson →") : null));
+}
+
+// ---- Assessment (intro or final) ----
+function Assessment(props) {
+  const bank = props.bank;
+  const [i, setI] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [correct, setCorrect] = useState(0);
+  const [missed, setMissed] = useState([]);
+  const q = bank[i];
+  const done = i >= bank.length;
+  if (done) {
+    const pct = Math.round(correct / bank.length * 100);
+    return h("div", { style: { maxWidth: 560, margin: "0 auto", padding: "50px 20px", textAlign: "center" } },
+      h("p", { style: { color: C.emerald, fontSize: 14, marginBottom: 8 } }, props.title),
+      h("div", { style: { fontSize: 56, fontWeight: 700, color: C.text, marginBottom: 12 } }, pct + "%"),
+      h("p", { style: { color: C.muted, fontSize: 15, lineHeight: 1.6, marginBottom: 10 } },
+        "You answered " + correct + " of " + bank.length + " correctly on these questions."),
+      missed.length ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginBottom: 20 } },
+        "Worth reviewing: " + missed.join(", ")) : null,
+      h("p", { style: { color: C.muted, fontSize: 12, lineHeight: 1.6, marginBottom: 24, fontStyle: "italic" } },
+        "This measures performance on these specific questions — it isn't a validated financial-literacy score or a sign of financial readiness."),
+      h("button", { onClick: function () { props.onDone(pct, missed); }, style: actBtn }, "Save & continue"));
+  }
+  return h("div", { style: { maxWidth: 620, margin: "0 auto", padding: "40px 20px" } },
+    h("p", { style: { color: C.emerald, fontSize: 14, marginBottom: 6 } }, props.title),
+    h("p", { style: { color: C.muted, fontSize: 13, marginBottom: 18 } }, "Question " + (i + 1) + " of " + bank.length),
+    h("h3", { style: { color: C.text, fontSize: 20, fontWeight: 600, marginBottom: 18, lineHeight: 1.4 } }, q.q),
+    h("div", { style: { display: "flex", flexDirection: "column", gap: 10 } },
+      q.options.map(function (o, oi) {
+        const reveal = picked != null; const isC = oi === q.correct; const chosen = picked === oi;
+        var bg = C.card, bd = C.border;
+        if (reveal && isC) { bg = "rgba(79,122,94,.10)"; bd = C.emerald; }
+        else if (reveal && chosen && !isC) { bg = "rgba(200,90,90,.09)"; bd = "#B4574F"; }
+        return h("button", { key: oi, disabled: reveal, onClick: function () { setPicked(oi); },
+          style: { textAlign: "left", padding: "13px 16px", borderRadius: 10, border: "1px solid " + bd,
+            background: bg, color: C.text, fontSize: 15, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, o);
+      })),
+    picked != null ? h("div", { style: { marginTop: 18 } },
+      h("button", { onClick: function () {
+        const wasRight = picked === q.correct;
+        const nc = correct + (wasRight ? 1 : 0);
+        const nm = wasRight ? missed : missed.concat([q.concept]);
+        if (i === bank.length - 1) { setCorrect(nc); setMissed(nm); setI(i + 1); }
+        else { setCorrect(nc); setMissed(nm); setPicked(null); setI(i + 1); }
+      }, style: actBtn }, i === bank.length - 1 ? "See result" : "Next") ) : null);
+}
+
+// ============================================================
+//  LEARN DASHBOARD  (replaces the old Learn page)
+// ============================================================
+function LearnDashboard(props) {
+  const [prog, setProg] = useState(loadProgress);
+  const [view, setView] = useState({ kind: "dashboard" }); // dashboard | lesson | intro | final
+  const [openModule, setOpenModule] = useState(null);
+  function persist(np) { setProg(np); saveProgress(np); }
+
+  const completedCount = Object.keys(prog.lessons).filter(function (k) { return prog.lessons[k]; }).length;
+  const totalLessons = ALL_LESSONS.length;
+  const nextIdx = ALL_LESSONS.findIndex(function (x) { return !prog.lessons[x.lesson.id]; });
+  const nextLesson = nextIdx >= 0 ? ALL_LESSONS[nextIdx] : null;
+
+  function openLesson(moduleId, lessonId) {
+    const m = CURRICULUM.find(function (mm) { return mm.id === moduleId; });
+    const l = m.lessons.find(function (ll) { return ll.id === lessonId; });
+    setView({ kind: "lesson", module: m, lesson: l });
+  }
+  function completeLesson(id) {
+    const np = Object.assign({}, prog, { lessons: Object.assign({}, prog.lessons) });
+    np.lessons[id] = true; persist(np);
+  }
+
+  // LESSON VIEW
+  if (view.kind === "lesson") {
+    const flatIdx = ALL_LESSONS.findIndex(function (x) { return x.lesson.id === view.lesson.id; });
+    const next = flatIdx >= 0 && flatIdx < ALL_LESSONS.length - 1 ? ALL_LESSONS[flatIdx + 1] : null;
+    return h(LessonView, {
+      lesson: view.lesson, module: view.module, completed: !!prog.lessons[view.lesson.id],
+      nextLesson: next,
+      onBack: function () { setView({ kind: "dashboard" }); },
+      onComplete: function () { completeLesson(view.lesson.id); setView({ kind: "dashboard" }); },
+      onNext: function () { completeLesson(view.lesson.id); openLesson(next.moduleId, next.lesson.id); },
+      onCheckAnswer: function () {}
+    });
+  }
+  // INTRO / FINAL ASSESSMENTS
+  if (view.kind === "intro") {
+    return h(Assessment, { bank: ASSESS_INTRO, title: "Starting Check",
+      onDone: function (pct, missed) {
+        const np = Object.assign({}, prog); if (np.introScore == null) { np.introScore = pct; np.introMissed = missed; }
+        persist(np); setView({ kind: "dashboard" }); } });
+  }
+  if (view.kind === "final") {
+    return h(Assessment, { bank: ASSESS_FINAL, title: "Final Check",
+      onDone: function (pct, missed) {
+        const np = Object.assign({}, prog); np.finalScore = pct; np.finalMissed = missed;
+        persist(np); setView({ kind: "dashboard" }); } });
+  }
+
+  // DASHBOARD
+  return h("div", { style: { maxWidth: 680, margin: "0 auto", padding: "40px 20px 80px" } },
+    h("h1", { style: { color: C.text, fontSize: 36, fontWeight: 700, marginBottom: 10 } }, "Learn investing, step by step"),
+    h("p", { style: { color: C.muted, fontSize: 17, marginBottom: 28, lineHeight: 1.6 } },
+      "Short lessons that build on each other. Start at the top and go in order — each one takes about 4 minutes."),
+
+    // THE ONE CLEAR ACTION
+    nextLesson
+      ? h("div", { style: { padding: 28, background: C.card, borderRadius: 18, border: "2px solid " + C.emerald, marginBottom: 14 } },
+          h("div", { style: { color: C.emerald, fontSize: 13, fontWeight: 700, marginBottom: 8, letterSpacing: ".04em" } },
+            completedCount === 0 ? "START HERE" : "PICK UP WHERE YOU LEFT OFF"),
+          h("div", { style: { fontFamily: C.serif, color: C.text, fontSize: 24, fontWeight: 700, marginBottom: 4 } }, nextLesson.lesson.title),
+          h("div", { style: { color: C.muted, fontSize: 15, marginBottom: 20 } }, "Lesson " + (completedCount + 1) + " of " + totalLessons + "  ·  " + nextLesson.lesson.mins + " min"),
+          h("button", { onClick: function () { openLesson(nextLesson.moduleId, nextLesson.lesson.id); },
+            style: { background: C.emerald, color: "#FBF9F3", border: "none", borderRadius: 12, padding: "16px 34px", fontSize: 18, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } },
+            completedCount === 0 ? "Start the first lesson" : "Continue"))
+      : h("div", { style: { padding: 28, background: C.card, borderRadius: 18, border: "2px solid " + C.emerald, marginBottom: 14, textAlign: "center" } },
+          h("div", { style: { fontFamily: C.serif, color: C.text, fontSize: 22, fontWeight: 700, marginBottom: 6 } }, "You finished every lesson."),
+          h("div", { style: { color: C.muted, fontSize: 15 } }, "Nice work. Scroll down to revisit any topic.")),
+
+    // simple progress line
+    h("div", { style: { marginBottom: 36 } },
+      h("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 7 } },
+        h("span", { style: { color: C.muted, fontSize: 14 } }, "Your progress"),
+        h("span", { style: { color: C.text, fontSize: 14, fontWeight: 600 } }, completedCount + " of " + totalLessons + " lessons")),
+      h(ProgressBar, { value: completedCount / totalLessons, h: 8 })),
+
+    // all topics — calm collapsed list
+    h("h2", { style: { color: C.text, fontSize: 20, fontWeight: 700, marginBottom: 6 } }, "All topics"),
+    h("p", { style: { color: C.muted, fontSize: 14, marginBottom: 16 } }, "Tap a topic to see its lessons. You can jump to any of them."),
+    CURRICULUM.map(function (m, mi) {
+      const mDone = m.lessons.filter(function (l) { return prog.lessons[l.id]; }).length;
+      const allDone = mDone === m.lessons.length;
+      const open = openModule === m.id;
+      return h("div", { key: m.id, style: { marginBottom: 10, background: C.card, borderRadius: 12, border: "1px solid " + C.border, overflow: "hidden" } },
+        // header row (tap to expand)
+        h("button", { onClick: function () { setOpenModule(open ? null : m.id); },
+          style: { width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+            background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", padding: "16px 18px", textAlign: "left" } },
+          h("span", { style: { display: "flex", alignItems: "center", gap: 14 } },
+            h("span", { style: { width: 30, height: 30, borderRadius: "50%", flexShrink: 0, display: "grid", placeItems: "center",
+              fontSize: 14, fontWeight: 700, background: allDone ? C.emerald : C.bg2, color: allDone ? "#FBF9F3" : C.muted,
+              border: "1px solid " + (allDone ? C.emerald : C.border) } }, allDone ? "✓" : (mi + 1)),
+            h("span", null,
+              h("span", { style: { display: "block", color: C.text, fontSize: 16, fontWeight: 600 } }, m.title),
+              h("span", { style: { display: "block", color: C.muted, fontSize: 13 } }, mDone + " of " + m.lessons.length + " done"))),
+          h("span", { style: { color: C.muted, fontSize: 22, transform: open ? "rotate(45deg)" : "none", transition: "transform .2s ease" } }, "+")),
+        // lessons (only when open)
+        open ? h("div", { style: { padding: "0 18px 14px 62px" } },
+          m.lessons.map(function (l) {
+            const isDone = !!prog.lessons[l.id];
+            return h("button", { key: l.id, onClick: function () { openLesson(m.id, l.id); },
+              style: { width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "none", border: "none", borderTop: "1px solid " + C.border, cursor: "pointer",
+                fontFamily: "inherit", padding: "11px 0", textAlign: "left" } },
+              h("span", { style: { color: isDone ? C.muted : C.text, fontSize: 15, display: "flex", alignItems: "center", gap: 9 } },
+                h("span", { style: { color: isDone ? C.emerald : C.border, fontSize: 14 } }, isDone ? "✓" : "○"),
+                l.title),
+              h("span", { style: { color: C.muted, fontSize: 13 } }, l.mins + " min"));
+          })) : null);
+    }),
+
+    // optional: quiet understanding check at the very bottom
+    h("div", { style: { marginTop: 32, padding: 20, background: C.bg2, borderRadius: 14, border: "1px solid " + C.border } },
+      h("div", { style: { color: C.text, fontSize: 15, fontWeight: 600, marginBottom: 4 } }, "Want to measure what you've learned?"),
+      h("p", { style: { color: C.muted, fontSize: 14, lineHeight: 1.6, marginBottom: prog.introScore != null && prog.finalScore != null ? 0 : 14 } },
+        "Take a quick check before and after the lessons to see how your understanding grows. Totally optional."),
+      prog.introScore != null && prog.finalScore != null
+        ? h("div", { style: { color: C.emerald, fontSize: 15, fontWeight: 600 } },
+            "Your check: " + prog.introScore + "% → " + prog.finalScore + "%  (" + (prog.finalScore - prog.introScore >= 0 ? "+" : "") + (prog.finalScore - prog.introScore) + " points)")
+        : h("button", { onClick: function () { setView({ kind: prog.introScore == null ? "intro" : "final" }); },
+            style: { background: "none", border: "1px solid " + C.emerald, color: C.emerald, borderRadius: 10, padding: "9px 18px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } },
+            prog.introScore == null ? "Take the starting check" : "Take the final check")),
+
+    // reset (quiet)
+    h("div", { style: { marginTop: 20, textAlign: "center" } },
+      h("button", { onClick: function () {
+        if (window.confirm("Reset all saved learning progress on this device? This cannot be undone.")) {
+          persist({ lessons: {}, checks: {}, introScore: null, finalScore: null });
+          setOpenModule(null);
+        }
+      }, style: { background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" } }, "Reset my progress")),
+
+    h("p", { style: { color: C.muted, fontSize: 12, textAlign: "center", marginTop: 20 } }, "Progress is saved on this device. No account needed."));
+}
+
+
+// ===== end =====
+
 const LESSONS = [{
   t: "What is a stock?",
   d: "A stock is a small share of ownership in a company. If the company grows, your share can become more valuable — but it can also fall."
@@ -3168,10 +4266,15 @@ function Landing({
       flexWrap: "wrap"
     }
   }, /*#__PURE__*/React.createElement(Btn, {
-    onClick: () => go("build")
+    onClick: () => go("build"),
+    style: { fontSize: 19, padding: "18px 32px", borderRadius: 14 }
   }, "Build My Portfolio"), /*#__PURE__*/React.createElement(Btn, {
+    onClick: () => go("learn"),
+    style: { fontSize: 19, padding: "18px 32px", borderRadius: 14, background: C.clay, color: "#FBF9F3" }
+  }, "Start Learning"), /*#__PURE__*/React.createElement(Btn, {
     kind: "ghost",
-    onClick: () => go("how")
+    onClick: () => go("how"),
+    style: { fontSize: 15 }
   }, "See How It Works"))), /*#__PURE__*/React.createElement(Card, {
     style: {
       padding: 26
@@ -3319,7 +4422,7 @@ function Landing({
       flexWrap: "wrap",
       marginBottom: 28
     }
-  }, ["📉 Run market scenarios", "🧪 Test what-if changes", "📊 Compare portfolios", "⏳ Explore the long term"].map(t => /*#__PURE__*/React.createElement("span", {
+  }, ["Run market scenarios", "Test what-if changes", "Compare portfolios", "⏳ Explore the long term"].map(t => /*#__PURE__*/React.createElement("span", {
     key: t,
     style: {
       color: C.text,
@@ -3425,21 +4528,21 @@ function About() {
 // One-year illustrative reaction of each asset class to each scenario.
 const LAB_SCENARIOS = {
   "Bull Market": {
-    icon: "📈",
+    icon: "",
     us_stocks: 0.18,
     international_stocks: 0.16,
     bonds: 0.03,
     cash: 0.01
   },
   "Stock Market Crash": {
-    icon: "📉",
+    icon: "",
     us_stocks: -0.28,
     international_stocks: -0.26,
     bonds: 0.02,
     cash: 0.00
   },
   "High Inflation": {
-    icon: "🔥",
+    icon: "",
     us_stocks: -0.05,
     international_stocks: -0.04,
     bonds: -0.07,
@@ -3453,21 +4556,21 @@ const LAB_SCENARIOS = {
     cash: 0.02
   },
   "Recession": {
-    icon: "🐻",
+    icon: "",
     us_stocks: -0.18,
     international_stocks: -0.17,
     bonds: 0.04,
     cash: 0.00
   },
   "Market Recovery": {
-    icon: "🌤️",
+    icon: "",
     us_stocks: 0.12,
     international_stocks: 0.13,
     bonds: 0.02,
     cash: 0.01
   },
   "Low-Volatility Market": {
-    icon: "😌",
+    icon: "",
     us_stocks: 0.05,
     international_stocks: 0.04,
     bonds: 0.03,
@@ -3568,6 +4671,196 @@ function growthStability(alloc) {
 // ============================================================
 //  PORTFOLIO LAB — UI
 // ============================================================
+
+// ===== LIVE SIM =====
+// ============================================================
+//  LIVE SIMULATION — animated multi-year run (seeded, deterministic)
+//  Each period picks an economic condition that moves each asset
+//  class differently (coherent, not fake-random). Press play and
+//  watch the portfolio evolve. Educational, simplified assumptions.
+// ============================================================
+// Seeded RNG (mulberry32) so a given seed always replays the same.
+function makeRng(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s |= 0; s = (s + 0x6D2B79F5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+// Economic conditions and how they pressure each asset class (per year, illustrative).
+const SIM_CONDITIONS = {
+  "Steady growth":        { us_stocks: 0.10, international_stocks: 0.09, bonds: 0.03, cash: 0.02, label: "The economy grows steadily. Stocks lead; bonds and cash plod along." },
+  "Strong bull run":      { us_stocks: 0.20, international_stocks: 0.17, bonds: 0.02, cash: 0.02, label: "Optimism runs high and stocks surge. The growth part of the portfolio does the heavy lifting." },
+  "Rising inflation":     { us_stocks: -0.03, international_stocks: -0.02, bonds: -0.06, cash: -0.01, label: "Prices climb. Longer bonds feel it most; even cash loses a little real ground." },
+  "Rate hikes":           { us_stocks: -0.06, international_stocks: -0.05, bonds: -0.08, cash: 0.03, label: "Interest rates rise. Bond prices dip, stocks wobble, and cash finally earns a bit." },
+  "Market downturn":      { us_stocks: -0.18, international_stocks: -0.17, bonds: 0.03, cash: 0.01, label: "A broad sell-off. Stocks drop hard while bonds and cash cushion the fall." },
+  "Recovery":             { us_stocks: 0.14, international_stocks: 0.15, bonds: 0.02, cash: 0.02, label: "Markets rebound. International often leads early recoveries in this model." },
+  "Calm / sideways":      { us_stocks: 0.04, international_stocks: 0.03, bonds: 0.03, cash: 0.02, label: "A quiet year. Everything drifts gently; nothing dramatic happens." }
+};
+const SIM_KEYS = Object.keys(SIM_CONDITIONS);
+
+// Build a full multi-year path for an allocation + seed. Deterministic.
+function buildSimPath(alloc, years, seed, startValue) {
+  const rng = makeRng(seed);
+  // weighted condition sequence: mostly growth/calm, occasional stress, with a downturn+recovery somewhere.
+  const seq = [];
+  for (let y = 0; y < years; y++) {
+    const r = rng();
+    let cond;
+    if (r < 0.34) cond = "Steady growth";
+    else if (r < 0.48) cond = "Strong bull run";
+    else if (r < 0.60) cond = "Calm / sideways";
+    else if (r < 0.72) cond = "Rising inflation";
+    else if (r < 0.84) cond = "Rate hikes";
+    else if (r < 0.93) cond = "Market downturn";
+    else cond = "Recovery";
+    seq.push(cond);
+  }
+  // guarantee at least one downturn followed by a recovery for the teaching moment
+  if (years >= 6 && seq.indexOf("Market downturn") === -1) {
+    const pos = Math.floor(years * 0.5);
+    seq[pos] = "Market downturn";
+    if (pos + 1 < years) seq[pos + 1] = "Recovery";
+  }
+  // step the portfolio through the sequence
+  const holdings = {};
+  for (const k in alloc) holdings[k] = startValue * (alloc[k] / 100);
+  const path = [{ year: 0, value: startValue, condition: "Start", holdings: Object.assign({}, holdings), note: "Your starting portfolio." }];
+  for (let y = 0; y < years; y++) {
+    const cond = seq[y]; const eff = SIM_CONDITIONS[cond];
+    const yearRng = makeRng(seed + y * 101);
+    for (const k in holdings) {
+      const base = eff[k];
+      const wiggle = (yearRng() - 0.5) * (ASSUMPTIONS[k].vol * 0.5); // small controlled variation
+      holdings[k] = Math.max(0, holdings[k] * (1 + base + wiggle));
+    }
+    const value = Object.values(holdings).reduce((a, b) => a + b, 0);
+    path.push({ year: y + 1, value: Math.round(value), condition: cond, holdings: Object.assign({}, holdings), note: eff.label });
+  }
+  return path;
+}
+
+function LiveSim(props) {
+  const START = 10000;
+  const alloc = props.alloc;
+  const [years] = useState(15);
+  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
+  const path = useMemo(() => buildSimPath(alloc, years, seed, START), [alloc, years, seed]);
+  const [step, setStep] = useState(0);        // current year shown
+  const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const timer = useRef(null);
+
+  useEffect(function () {
+    if (!playing) return;
+    timer.current = setInterval(function () {
+      setStep(function (s) {
+        if (s >= years) { setPlaying(false); return s; }
+        return s + 1;
+      });
+    }, 700 / speed);
+    return function () { clearInterval(timer.current); };
+  }, [playing, speed, years]);
+
+  const cur = path[step];
+  const shown = path.slice(0, step + 1);
+  const pct = ((cur.value - START) / START) * 100;
+  // chart geometry
+  const W = 640, H = 220, pad = 8;
+  const maxV = Math.max.apply(null, path.map(function (p) { return p.value; })) * 1.05;
+  const minV = Math.min.apply(null, path.map(function (p) { return p.value; })) * 0.95;
+  const x = function (i) { return pad + (i / years) * (W - 2 * pad); };
+  const y = function (v) { return H - pad - ((v - minV) / (maxV - minV)) * (H - 2 * pad); };
+  const linePts = shown.map(function (p, i) { return x(i) + "," + y(p.value); }).join(" ");
+
+  function reset() { setPlaying(false); setStep(0); }
+
+  return h("div", null,
+    h("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10, marginBottom: 6 } },
+      h("div", null,
+        h("h3", { style: { color: C.text, fontSize: 20, fontWeight: 700, marginBottom: 2 } }, "Run a simulation"),
+        h("p", { style: { color: C.muted, fontSize: 14, margin: 0 } }, "Press play and watch your $10,000 move through " + years + " years of changing conditions.")),
+      h("div", { style: { textAlign: "right" } },
+        h("div", { style: { color: C.muted, fontSize: 12 } }, "Year " + cur.year + " of " + years),
+        h("div", { style: { fontSize: 26, fontWeight: 700, fontFamily: C.serif, color: pct >= 0 ? C.emerald : C.clay } },
+          "$" + cur.value.toLocaleString()),
+        h("div", { style: { fontSize: 13, color: pct >= 0 ? C.emerald : C.clay } }, (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%"))),
+
+    // chart
+    h("div", { style: { background: C.card, border: "1px solid " + C.border, borderRadius: 14, padding: 16, marginBottom: 14 } },
+      h("svg", { viewBox: "0 0 " + W + " " + H, style: { width: "100%", height: "auto", display: "block" } },
+        // baseline (start value)
+        h("line", { x1: pad, x2: W - pad, y1: y(START), y2: y(START), stroke: C.border, strokeDasharray: "4 4", strokeWidth: 1 }),
+        shown.length > 1 ? h("polyline", { points: linePts, fill: "none", stroke: pct >= 0 ? C.emerald : C.clay, strokeWidth: 2.5, strokeLinejoin: "round", strokeLinecap: "round" }) : null,
+        // current point
+        h("circle", { cx: x(step), cy: y(cur.value), r: 5, fill: pct >= 0 ? C.emerald : C.clay }),
+        // condition markers (dots) on each shown year
+        shown.map(function (p, i) {
+          if (i === 0) return null;
+          const down = p.condition === "Market downturn";
+          return h("circle", { key: i, cx: x(i), cy: y(p.value), r: down ? 3.5 : 2, fill: down ? C.clay : C.muted, opacity: 0.6 });
+        }))),
+
+    // current condition card
+    h("div", { style: { background: C.bg2, border: "1px solid " + C.border, borderRadius: 12, padding: 16, marginBottom: 14 } },
+      h("div", { style: { color: C.emerald, fontSize: 12, fontWeight: 700, marginBottom: 4, letterSpacing: ".03em" } }, "THIS YEAR: " + cur.condition.toUpperCase()),
+      h("div", { style: { color: C.text, fontSize: 14, lineHeight: 1.6 } }, cur.note)),
+
+    // live asset values
+    h("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 } },
+      Object.keys(ASSET_META).map(function (k) {
+        const v = cur.holdings[k]; const start0 = START * (alloc[k] / 100);
+        const chg = start0 > 0 ? ((v - start0) / start0 * 100) : 0;
+        return h("div", { key: k, style: { display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "9px 12px", background: C.card, borderRadius: 10, border: "1px solid " + C.border } },
+          h("span", { style: { color: C.text, fontSize: 13, display: "flex", alignItems: "center", gap: 7 } },
+            h("span", { style: { width: 8, height: 8, borderRadius: 2, background: ASSET_META[k].color } }), ASSET_META[k].label),
+          h("span", { style: { textAlign: "right" } },
+            h("div", { style: { color: C.text, fontSize: 13, fontWeight: 600 } }, "$" + Math.round(v).toLocaleString()),
+            h("div", { style: { color: chg >= 0 ? C.emerald : C.clay, fontSize: 11 } }, (chg >= 0 ? "+" : "") + chg.toFixed(1) + "%")));
+      })),
+
+    // controls
+    h("div", { style: { display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" } },
+      h("button", { onClick: function () { if (step >= years) reset(); setPlaying(!playing); },
+        style: { background: C.emerald, color: "#FBF9F3", border: "none", borderRadius: 10, padding: "11px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } },
+        playing ? "Pause" : (step >= years ? "Replay" : (step === 0 ? "Play" : "Resume"))),
+      h("button", { onClick: function () { setPlaying(false); setStep(Math.min(years, step + 1)); }, disabled: step >= years,
+        style: { background: C.bg2, color: C.text, border: "1px solid " + C.border, borderRadius: 10, padding: "11px 18px", fontSize: 14, fontWeight: 600, cursor: step >= years ? "default" : "pointer", fontFamily: "inherit", opacity: step >= years ? 0.5 : 1 } }, "Step"),
+      h("button", { onClick: reset, style: { background: "none", color: C.muted, border: "1px solid " + C.border, borderRadius: 10, padding: "11px 18px", fontSize: 14, cursor: "pointer", fontFamily: "inherit" } }, "Restart"),
+      h("div", { style: { display: "flex", gap: 4, marginLeft: "auto", alignItems: "center" } },
+        h("span", { style: { color: C.muted, fontSize: 12, marginRight: 4 } }, "Speed"),
+        [1, 2, 4].map(function (sp) {
+          return h("button", { key: sp, onClick: function () { setSpeed(sp); },
+            style: { background: speed === sp ? C.emerald : C.bg2, color: speed === sp ? "#FBF9F3" : C.text,
+              border: "1px solid " + (speed === sp ? C.emerald : C.border), borderRadius: 8, padding: "6px 11px", fontSize: 12, cursor: "pointer", fontFamily: "inherit" } }, sp + "x");
+        })),
+      h("button", { onClick: function () { setSeed(Math.floor(Math.random() * 100000)); setStep(0); setPlaying(false); },
+        style: { background: "none", color: C.emerald, border: "none", fontSize: 13, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline" } }, "New run")),
+
+    // end-of-run summary
+    step >= years ? (function () {
+      const lowest = path.reduce(function (a, b) { return b.value < a.value ? b : a; });
+      const highest = path.reduce(function (a, b) { return b.value > a.value ? b : a; });
+      const downturns = path.filter(function (p) { return p.condition === "Market downturn"; }).length;
+      return h("div", { style: { marginTop: 16, padding: 18, background: C.bg2, borderRadius: 14, border: "1px solid " + C.emeraldDim } },
+        h("div", { style: { fontFamily: C.serif, color: C.text, fontSize: 18, fontWeight: 700, marginBottom: 10 } }, "What happened"),
+        h("p", { style: { color: C.text, fontSize: 14, lineHeight: 1.7, margin: "0 0 8px" } },
+          "Over " + years + " years your portfolio went from $" + START.toLocaleString() + " to $" + cur.value.toLocaleString() +
+          " (" + (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%). It passed through " + downturns + " downturn" + (downturns === 1 ? "" : "s") +
+          ", dipping as low as $" + lowest.value.toLocaleString() + " and reaching as high as $" + highest.value.toLocaleString() + "."),
+        h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.7, margin: 0 } },
+          "Notice the path wasn't a straight line — that's the point. Your stock-heavier slices drove most of both the gains and the scary drops, while bonds and cash steadied the ride. Run it again with a different sequence, or change your mix in Build, to see how the journey changes."));
+    })() : null,
+
+    h("p", { style: { color: C.muted, fontSize: 11, lineHeight: 1.6, marginTop: 14, fontStyle: "italic" } },
+      "A simplified, hypothetical educational model — not historical data, a forecast, or a prediction. Each run is one of many possible paths."));
+}
+
+// ===== end live sim =====
+
 function Simulator({
   incomingAlloc
 }) {
@@ -3593,7 +4886,7 @@ function Simulator({
   } = blended(mix);
   const scenarioResult = useMemo(() => active ? runScenario(mix, active, START) : null, [active, mix]);
   const whatIfResult = useMemo(() => active && whatIf ? runScenario(whatIf, active, START) : null, [active, whatIf]);
-  const TABS = [["build", "Build"], ["scenarios", "Scenarios"], ["compare", "Compare"], ["timeline", "Long term"]];
+  const TABS = [["build", "Build"], ["simulate", "Simulate"], ["scenarios", "Scenarios"], ["compare", "Compare"], ["timeline", "Long term"]];
   const riskLabel = vol > 0.13 ? "Higher" : vol > 0.08 ? "Moderate" : "Lower";
   const growthTilt = growthStability(mix);
   return /*#__PURE__*/React.createElement("div", {
@@ -3632,7 +4925,7 @@ function Simulator({
       border: `1px solid ${C.emeraldDim}`,
       color: C.emerald
     }
-  }, "✓ Loaded the portfolio from your Vestari result — tweak it or test it below."), /*#__PURE__*/React.createElement("div", {
+  }, "Loaded the portfolio from your Vestari result — tweak it or test it below."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 4,
@@ -3723,7 +5016,7 @@ function Simulator({
       color: total === 100 ? C.emerald : "#9A7B2E",
       border: `1px solid ${total === 100 ? C.emeraldDim : C.cash}`
     }
-  }, total === 100 ? "✓ Adds up to 100%" : `Currently ${total}% — set it to 100% for a realistic run.`)), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("h3", {
+  }, total === 100 ? "Adds up to 100%" : `Currently ${total}% — set it to 100% for a realistic run.`)), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("h3", {
     style: {
       color: C.text,
       fontSize: 18,
@@ -3811,7 +5104,7 @@ function Simulator({
       width: 14,
       height: 14,
       borderRadius: "50%",
-      background: "#fff",
+      background: "#FBF9F3",
       border: `2px solid ${C.emerald}`
     }
   }))), /*#__PURE__*/React.createElement(Btn, {
@@ -3856,7 +5149,7 @@ function Simulator({
       fontFamily: "inherit",
       fontSize: 14,
       background: active === s ? C.emerald : C.bg2,
-      color: active === s ? "#fff" : C.text,
+      color: active === s ? "#FBF9F3" : C.text,
       border: `1px solid ${active === s ? C.emerald : C.border}`
     }
   }, LAB_SCENARIOS[s].icon, " ", s)))), scenarioResult && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Card, {
@@ -4211,7 +5504,7 @@ function Simulator({
       fontFamily: "inherit",
       fontSize: 13,
       background: active === s ? C.emerald : C.bg2,
-      color: active === s ? "#fff" : C.text,
+      color: active === s ? "#FBF9F3" : C.text,
       border: `1px solid ${active === s ? C.emerald : C.border}`
     }
   }, LAB_SCENARIOS[s].icon, " ", s)))), active && (() => {
@@ -4277,7 +5570,7 @@ function Simulator({
         marginTop: 14
       }
     }, "Notice the pattern: portfolios with more stocks tend to swing more (bigger gains ", /*#__PURE__*/React.createElement("em", null, "and"), " bigger drops), while more conservative mixes move less. There's no single \"best\" — each is a different trade-off between growth and steadiness."));
-  })()), tab === "timeline" && /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("h3", {
+  })()), tab === "simulate" && /*#__PURE__*/React.createElement(LiveSim, { alloc: mix }), tab === "timeline" && /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement("h3", {
     style: {
       color: C.text,
       fontSize: 18,
@@ -4550,7 +5843,7 @@ function LearningPath() {
       fontSize: 40,
       marginBottom: 8
     }
-  }, "🏅"), /*#__PURE__*/React.createElement("h3", {
+  }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
     style: {
       color: C.emerald,
       fontSize: 20,
@@ -4605,7 +5898,7 @@ function LearningPath() {
         fontWeight: 700,
         flexShrink: 0,
         background: isDone ? C.emerald : C.bg2,
-        color: isDone ? "#fff" : C.muted,
+        color: isDone ? "#FBF9F3" : C.muted,
         border: `1px solid ${isDone ? C.emerald : C.border}`
       }
     }, isDone ? "✓" : i + 1), /*#__PURE__*/React.createElement("span", {
@@ -4966,11 +6259,14 @@ function App() {
     style: {
       background: C.bg,
       minHeight: "100vh",
-      fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
+      fontFamily: C.sans
     }
   }, /*#__PURE__*/React.createElement("style", null, `
         * { box-sizing: border-box; margin: 0; }
-        /* system fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Darker+Grotesque:wght@400;500;600;700&display=swap');
+        body { font-family: 'Darker Grotesque', 'Inter', system-ui, sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.01em; }
+        /* hand-tuned: body grotesque, display serif */
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         input[type=range]{ height: 6px; border-radius: 99px; }
@@ -5114,7 +6410,7 @@ function App() {
     onGoBuild: () => go("build")
   }), page === "simulator" && /*#__PURE__*/React.createElement(Simulator, {
     incomingAlloc: labAlloc
-  }), page === "challenges" && /*#__PURE__*/React.createElement(WhyChallenges, null), page === "learn" && /*#__PURE__*/React.createElement(Learn, null), page === "path" && /*#__PURE__*/React.createElement(LearningPath, null), page === "glossary" && /*#__PURE__*/React.createElement(Glossary, null), page === "about" && /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement("footer", {
+  }), page === "challenges" && /*#__PURE__*/React.createElement(WhyChallenges, null), page === "learn" && /*#__PURE__*/React.createElement(LearnDashboard, null), page === "path" && /*#__PURE__*/React.createElement(LearningPath, null), page === "glossary" && /*#__PURE__*/React.createElement(Glossary, null), page === "about" && /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement("footer", {
     style: {
       borderTop: `1px solid ${C.border}`,
       marginTop: 40
