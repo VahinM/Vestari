@@ -4505,7 +4505,7 @@ function About() {
       fontSize: 18,
       fontWeight: 600
     }
-  }, "[ Your name here ]")), /*#__PURE__*/React.createElement("div", {
+  }, "Vahin Mundla")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 30,
       padding: 20,
@@ -6254,7 +6254,7 @@ function App() {
     setMenu(false);
     setPage(p);
   };
-  const nav = [["home", "Home"], ["build", "Build Portfolio"], ["workshop", "Workshop"], ["simulator", "Portfolio Lab"], ["challenges", "Challenges"], ["learn", "Learn"], ["path", "Learning Path"], ["glossary", "Glossary"], ["about", "About"]];
+  const nav = [["home", "Home"], ["build", "Build Portfolio"], ["simulator", "Portfolio Lab"], ["learn", "Workshop"], ["about", "About"]];
   return /*#__PURE__*/React.createElement("div", {
     style: {
       background: C.bg,
@@ -6410,7 +6410,7 @@ function App() {
     onGoBuild: () => go("build")
   }), page === "simulator" && /*#__PURE__*/React.createElement(Simulator, {
     incomingAlloc: labAlloc
-  }), page === "challenges" && /*#__PURE__*/React.createElement(WhyChallenges, null), page === "learn" && /*#__PURE__*/React.createElement(LearnDashboard, null), page === "path" && /*#__PURE__*/React.createElement(LearningPath, null), page === "glossary" && /*#__PURE__*/React.createElement(Glossary, null), page === "about" && /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement("footer", {
+  }), page === "learn" && /*#__PURE__*/React.createElement(LearnDashboard, null), page === "path" && /*#__PURE__*/React.createElement(LearningPath, null), page === "glossary" && /*#__PURE__*/React.createElement(Glossary, null), page === "about" && /*#__PURE__*/React.createElement(About, null), /*#__PURE__*/React.createElement("footer", {
     style: {
       borderTop: `1px solid ${C.border}`,
       marginTop: 40
@@ -6464,7 +6464,7 @@ function App() {
       fontWeight: 600,
       marginBottom: 10
     }
-  }, "Product"), [["build", "Build Portfolio"], ["learn", "Learn"], ["glossary", "Glossary"]].map(([p, l]) => /*#__PURE__*/React.createElement("button", {
+  }, "Product"), [["build", "Build Portfolio"], ["learn", "Workshop"], ["simulator", "Portfolio Lab"]].map(([p, l]) => /*#__PURE__*/React.createElement("button", {
     key: p,
     onClick: () => go(p),
     style: {
