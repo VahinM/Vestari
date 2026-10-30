@@ -948,7 +948,7 @@ const Btn = ({
     fontSize: 15,
     fontWeight: 600,
     padding: "13px 22px",
-    borderRadius: 12,
+    borderRadius: 6,
     cursor: "pointer",
     transition: "transform .15s ease, background .15s ease, box-shadow .15s ease",
     border: "1px solid transparent"
@@ -989,7 +989,7 @@ const Card = ({
   style: {
     background: C.card,
     border: `1px solid ${C.border}`,
-    borderRadius: 18,
+    borderRadius: 6,
     padding: 24,
     ...style
   }
@@ -2589,7 +2589,7 @@ function Results({
   }, "Take the understanding quiz"), /*#__PURE__*/React.createElement(Btn, {
     kind: "soft",
     onClick: () => downloadPlan(result, answers)
-  }, "⬇ Save my plan"), /*#__PURE__*/React.createElement(Btn, {
+  }, "Save my plan"), /*#__PURE__*/React.createElement(Btn, {
     kind: "soft",
     onClick: () => window.print()
   }, "Print"), /*#__PURE__*/React.createElement(Btn, {
@@ -3616,7 +3616,7 @@ function Activity(props) {
                   color: col, fontSize: 13, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, b);
             })));
       }),
-      allAnswered ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 6 } }, "✓ Nice — the highlighted answers show the right match.") : null);
+      allAnswered ? h("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 6 } }, "Nice — the highlighted answers show the right match.") : null);
   }
 
   // --- rank: order from low to high ---
@@ -3640,7 +3640,7 @@ function Activity(props) {
       }),
       h("button", { onClick: function () { setChecked(true); }, style: actBtn }, "Check order"),
       checked ? h("p", { style: { color: right ? C.emerald : "#B4574F", fontSize: 13, lineHeight: 1.6, marginTop: 10 } },
-        right ? "✓ " + a.feedback : "Not quite — try arranging from lowest to highest risk.") : null);
+        right ? a.feedback : "Not quite — try arranging from lowest to highest risk.") : null);
   }
 
   // --- compare: two cards side by side ---
@@ -3686,7 +3686,7 @@ function Activity(props) {
       h("input", { type: "range", min: a.min, max: a.max, step: a.step, value: val,
         onChange: function (e) { setVal(parseInt(e.target.value)); },
         style: { width: "100%", accentColor: C.emerald } }),
-      close ? h("p", { style: { color: C.emerald, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, "✓ " + a.feedback) : null);
+      close ? h("p", { style: { color: C.emerald, fontSize: 13, lineHeight: 1.6, marginTop: 12 } }, a.feedback) : null);
   }
 
   // --- inflation: future buying power ---
@@ -3817,7 +3817,7 @@ function KnowledgeChecks(props) {
                 background: bg, color: C.text, fontSize: 14, fontFamily: "inherit", cursor: reveal ? "default" : "pointer" } }, o);
           })),
         picked != null ? h("p", { style: { color: picked === c.correct ? C.emerald : C.muted, fontSize: 13, lineHeight: 1.6, marginTop: 10 } },
-          (picked === c.correct ? "✓ Correct. " : "Not quite. ") + c.explain) : null);
+          (picked === c.correct ? "Right. " : "Not quite. ") + c.explain) : null);
     }));
 }
 
@@ -3857,7 +3857,7 @@ function LessonView(props) {
     // complete button
     h("div", { style: { display: "flex", gap: 12, flexWrap: "wrap" } },
       h("button", { onClick: props.onComplete, style: Object.assign({}, actBtn, { padding: "13px 22px", fontSize: 15 }) },
-        props.completed ? "✓ Completed — review done" : "Mark lesson complete"),
+        props.completed ? "Completed — review done" : "Mark lesson complete"),
       props.nextLesson ? h("button", { onClick: props.onNext, style: { background: C.bg2, color: C.text, border: "1px solid " + C.border, borderRadius: 10, padding: "13px 22px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" } }, "Next lesson →") : null));
 }
 
@@ -4000,7 +4000,7 @@ function LearnDashboard(props) {
           h("span", { style: { display: "flex", alignItems: "center", gap: 14 } },
             h("span", { style: { width: 30, height: 30, borderRadius: "50%", flexShrink: 0, display: "grid", placeItems: "center",
               fontSize: 14, fontWeight: 700, background: allDone ? C.emerald : C.bg2, color: allDone ? "#FBF9F3" : C.muted,
-              border: "1px solid " + (allDone ? C.emerald : C.border) } }, allDone ? "✓" : (mi + 1)),
+              border: "1px solid " + (allDone ? C.emerald : C.border) } }, allDone ? "\u2022" : (mi + 1)),
             h("span", null,
               h("span", { style: { display: "block", color: C.text, fontSize: 16, fontWeight: 600 } }, m.title),
               h("span", { style: { display: "block", color: C.muted, fontSize: 13 } }, mDone + " of " + m.lessons.length + " done"))),
@@ -4014,7 +4014,7 @@ function LearnDashboard(props) {
                 background: "none", border: "none", borderTop: "1px solid " + C.border, cursor: "pointer",
                 fontFamily: "inherit", padding: "11px 0", textAlign: "left" } },
               h("span", { style: { color: isDone ? C.muted : C.text, fontSize: 15, display: "flex", alignItems: "center", gap: 9 } },
-                h("span", { style: { color: isDone ? C.emerald : C.border, fontSize: 14 } }, isDone ? "✓" : "○"),
+                h("span", { style: { color: isDone ? C.emerald : C.border, fontSize: 14 } }, isDone ? "\u2022" : "\u25CB"),
                 l.title),
               h("span", { style: { color: C.muted, fontSize: 13 } }, l.mins + " min"));
           })) : null);
@@ -4335,36 +4335,17 @@ function Landing({
       textAlign: "center"
     }
   }, "How it works"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "grid",
-      gridTemplateColumns: "1fr",
-      gap: 18
-    },
-    className: "grid-3"
-  }, [["Tell us about yourself", "Answer a few questions about your goals, timeline, and comfort with risk."], ["See your sample portfolio", "Vestari creates an educational asset allocation based on your answers."], ["Understand the reasoning", "See exactly why each asset was included and how your answers shaped the result."]].map(([t, d], i) => /*#__PURE__*/React.createElement(Card, {
-    key: i
+    style: { display: "flex", flexDirection: "column", gap: 0, maxWidth: 680, margin: "0 auto" }
+  }, [["Tell us about yourself", "Answer a few questions about your goals, timeline, and comfort with risk."], ["See your sample portfolio", "Vestari creates an educational asset allocation based on your answers."], ["Understand the reasoning", "See exactly why each asset was included and how your answers shaped the result."]].map(([t, d], i, arr) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: { display: "flex", gap: 22, alignItems: "flex-start", padding: "22px 0", borderBottom: i < arr.length - 1 ? ("1px solid " + C.border) : "none" }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      color: C.emerald,
-      fontSize: 15,
-      fontWeight: 700,
-      marginBottom: 10
-    }
-  }, i + 1), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      color: C.text,
-      fontSize: 18,
-      fontWeight: 600,
-      marginBottom: 8
-    }
+    style: { fontFamily: C.serif, color: C.emerald, fontSize: 40, fontWeight: 600, lineHeight: 1, flexShrink: 0, width: 50 }
+  }, i + 1), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
+    style: { color: C.text, fontSize: 20, fontWeight: 600, marginBottom: 5 }
   }, t), /*#__PURE__*/React.createElement("p", {
-    style: {
-      color: C.muted,
-      fontSize: 15,
-      lineHeight: 1.6,
-      margin: 0
-    }
-  }, d)))), /*#__PURE__*/React.createElement("div", {
+    style: { color: C.muted, fontSize: 16, lineHeight: 1.6, margin: 0 }
+  }, d))))), /*#__PURE__*/React.createElement("div", {
     style: {
       textAlign: "center",
       marginTop: 40
@@ -4422,7 +4403,7 @@ function Landing({
       flexWrap: "wrap",
       marginBottom: 28
     }
-  }, ["Run market scenarios", "Test what-if changes", "Compare portfolios", "⏳ Explore the long term"].map(t => /*#__PURE__*/React.createElement("span", {
+  }, ["Run market scenarios", "Test what-if changes", "Compare portfolios", "Explore the long term"].map(t => /*#__PURE__*/React.createElement("span", {
     key: t,
     style: {
       color: C.text,
@@ -4549,7 +4530,7 @@ const LAB_SCENARIOS = {
     cash: -0.03
   },
   "Rising Interest Rates": {
-    icon: "⬆️",
+    icon: "",
     us_stocks: -0.07,
     international_stocks: -0.06,
     bonds: -0.09,
@@ -5901,7 +5882,7 @@ function LearningPath() {
         color: isDone ? "#FBF9F3" : C.muted,
         border: `1px solid ${isDone ? C.emerald : C.border}`
       }
-    }, isDone ? "✓" : i + 1), /*#__PURE__*/React.createElement("span", {
+    }, isDone ? "\u2022" : i + 1), /*#__PURE__*/React.createElement("span", {
       style: {
         color: C.text,
         fontSize: 16,
@@ -5938,7 +5919,7 @@ function LearningPath() {
         fontSize: 14,
         fontWeight: 600
       }
-    }, "✓ Completed")));
+    }, "Completed")));
   })));
 }
 
